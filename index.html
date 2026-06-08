@@ -820,17 +820,44 @@
             const content = document.createElement('div');
             content.className = 'message-content';
 
-            // 显示编辑历史
+            // 当前显示的内容
+            const displayContent = msg._showingVersion === 'original' && msg._originalContent 
+                ? msg._originalContent 
+                : msg.content;
+    
+            // 构建内容HTML
             let contentHTML = '';
-            if (msg.editHistory && msg.editHistory.length > 0) {
-                contentHTML += `<div class="edit-history-badge" onclick="toggleEditHistory(this)">✏️ 已编辑 ${msg.editHistory.length}次 ▾</div>`;
-                contentHTML += `<div class="edit-history-panel">`;
-                msg.editHistory.forEach((h, i) => {
-                    contentHTML += `<div class="edit-history-item">第${i+1}次: ${escapeHtml(h.oldContent).substring(0, 50)}...</div>`;
-                });
-                contentHTML += `</div>`;
+    
+            if (msg._hasEdits) {
+                // 版本指示器
+                if (msg._showingVersion === 'original') {
+                    contentHTML += `<div style="font-size:10px;color:rgba(255,255,255,0.7);margin-bottom:4px;">📝 原始消息</div>`;
+                } else {
+                    contentHTML += `<div style="font-size:10px;color:rgba(255,255,255,0.7);margin-bottom:4px;">✏️ 已编辑 · <span style="text-decoration:underline;cursor:pointer;" onclick="toggleMessageVersion(${index}, event)">查看原始</span></div>`;
+                }
+        
+                // 显示编辑次数
+                if (msg.editHistory && msg.editHistory.length > 0) {
+                    contentHTML += `<div class="edit-history-badge" onclick="toggleEditHistory(this)">📋 编辑记录 (${msg.editHistory.length}次) ▾</div>`;
+                    contentHTML += `<div class="edit-history-panel">`;
+                    msg.editHistory.forEach((h, i) => {
+                        const shortContent = h.oldContent.length > 60 ? h.oldContent.substring(0, 60) + '...' : h.oldContent;
+                        const date = new Date(h.editedAt).toLocaleString('zh-CN', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+                        contentHTML += `<div class="edit-history-item"><strong>第${i+1}次</strong> ${date}<br>${escapeHtml(shortContent)}</div>`;
+                    });
+                    contentHTML += `</div>`;
+                }
             }
-            contentHTML += escapeHtml(msg.content);
+    
+            contentHTML += escapeHtml(displayContent);
+    
+            // 如果显示原始版本，添加"查看当前"按钮
+            if (msg._showingVersion === 'original') {
+                contentHTML += `<div style="margin-top:6px;font-size:11px;text-align:right;">
+                    <span style="text-decoration:underline;cursor:pointer;opacity:0.8;" onclick="toggleMessageVersion(${index}, event)">查看当前版本 →</span>
+                </div>`;
+            }
+    
             content.innerHTML = contentHTML;
 
             msgDiv.appendChild(avatar);
@@ -841,76 +868,46 @@
             const actions = document.createElement('div');
             actions.className = 'message-actions';
             actions.style.justifyContent = 'flex-end';
+    
             const editBtn = document.createElement('button');
             editBtn.className = 'message-action-btn';
             editBtn.textContent = '✏️ 编辑';
             editBtn.onclick = () => editMessage(index);
             actions.appendChild(editBtn);
-            wrapper.appendChild(actions);
-
-            container.appendChild(wrapper);
-        }
-
-        function renderAssistantMessage(versions, startIndex, container) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'message-wrapper';
-            wrapper.dataset.msgIndex = startIndex;
-
-            // 主回复（第一个版本）
-            const mainMsg = versions[0];
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'message assistant';
-
-            const avatar = document.createElement('div');
-            avatar.className = 'avatar';
-            avatar.textContent = appState.assistantAvatar;
-
-            const content = document.createElement('div');
-            content.className = 'message-content';
-            if (mainMsg.isError) content.classList.add('error-msg');
-            content.textContent = mainMsg.content;
-
-            msgDiv.appendChild(avatar);
-            msgDiv.appendChild(content);
-            wrapper.appendChild(msgDiv);
-
-            // 重新生成的版本
-            if (versions.length > 1) {
-                const regenSection = document.createElement('div');
-                regenSection.className = 'regenerated-section';
-                regenSection.innerHTML = '<div class="regenerated-label">🔄 重新生成的回答：</div>';
-
-                versions.slice(1).forEach((v, i) => {
-                    const item = document.createElement('div');
-                    item.className = 'regenerated-item';
-                    item.innerHTML = `<div class="version-num">版本 ${i + 2}</div>${escapeHtml(v.content)}`;
-                    regenSection.appendChild(item);
-                });
-
-                wrapper.appendChild(regenSection);
-            }
-
-            // 操作按钮
-            const actions = document.createElement('div');
-            actions.className = 'message-actions';
-            actions.style.justifyContent = 'flex-start';
-            
-            const regenBtn = document.createElement('button');
-            regenBtn.className = 'message-action-btn';
-            regenBtn.textContent = '🔄 重新生成';
-            regenBtn.onclick = () => regenerateResponse(startIndex);
-            actions.appendChild(regenBtn);
-
+    
             wrapper.appendChild(actions);
             container.appendChild(wrapper);
         }
 
+        // ========== 切换编辑历史面板 ==========
         function toggleEditHistory(badge) {
             const panel = badge.nextElementSibling;
+            if (!panel) return;
             panel.classList.toggle('show');
-            badge.textContent = panel.classList.contains('show') 
-                ? badge.textContent.replace('▾', '▴') 
-                : badge.textContent.replace('▴', '▾');
+            if (panel.classList.contains('show')) {
+                badge.textContent = badge.textContent.replace('▾', '▴');
+            } else {
+                badge.textContent = badge.textContent.replace('▴', '▾');
+            }
+        }
+
+        // ========== 切换消息版本（原始/当前） ==========
+        function toggleMessageVersion(index, event) {
+            event.stopPropagation();
+            const session = appState.sessions[appState.activeSessionId];
+            if (!session) return;
+            
+            const msg = session.messages[index];
+            if (!msg || !msg._hasEdits) return;
+            
+            if (msg._showingVersion === 'original') {
+                msg._showingVersion = 'current';
+            } else {
+                msg._showingVersion = 'original';
+            }
+            
+            dbPut('chats', session);
+            renderChat();
         }
 
         // ========== 编辑消息 ==========
@@ -920,22 +917,27 @@
             const msg = session.messages[index];
             if (!msg || msg.role !== 'user') return;
 
-            const newContent = prompt('编辑消息（修改后会自动重新生成AI回复）:', msg.content);
+            const newContent = prompt('编辑消息:', msg.content);
             if (newContent === null || newContent.trim() === '') return;
             if (newContent.trim() === msg.content) return;
 
-            // 保存编辑历史
+            // 保存编辑历史（包含原始版本）
             if (!msg.editHistory) msg.editHistory = [];
             msg.editHistory.push({
                 oldContent: msg.content,
                 editedAt: new Date().toISOString()
             });
+    
+            // 更新消息内容为新版本
             msg.content = newContent.trim();
+            msg._hasEdits = true;
+            msg._showingVersion = 'current'; // 'current' | 'original'
+            msg._originalContent = msg.editHistory[0].oldContent; // 最初版本
 
-            // 删除此消息之后的所有消息（包括重新生成的版本）
+            // 删除该消息之后的所有回复
             session.messages = session.messages.slice(0, index + 1);
-            // 清除编辑标记后的重新生成版本
-            session.messages = session.messages.filter(m => !m._isRegenerated || session.messages.indexOf(m) <= index);
+            // 清除重新生成的版本标记
+            session.messages = session.messages.filter(m => !m._isRegenerated);
 
             await updateSessionInfo(appState.activeSessionId);
             renderChat();
