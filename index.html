@@ -910,6 +910,61 @@
             renderChat();
         }
 
+        // ========== 渲染AI消息 ==========
+        function renderAssistantMessage(versions, startIndex, container) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'message-wrapper';
+            wrapper.dataset.msgIndex = startIndex;
+
+            // 主回复（第一个版本）
+            const mainMsg = versions[0];
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message assistant';
+
+            const avatar = document.createElement('div');
+            avatar.className = 'avatar';
+            avatar.textContent = appState.assistantAvatar;
+
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            if (mainMsg.isError) content.classList.add('error-msg');
+            content.textContent = mainMsg.content;
+
+            msgDiv.appendChild(avatar);
+            msgDiv.appendChild(content);
+            wrapper.appendChild(msgDiv);
+
+            // 重新生成的版本
+            if (versions.length > 1) {
+                const regenSection = document.createElement('div');
+                regenSection.className = 'regenerated-section';
+                regenSection.innerHTML = '<div class="regenerated-label">🔄 重新生成的回答：</div>';
+
+                versions.slice(1).forEach((v, i) => {
+                    const item = document.createElement('div');
+                    item.className = 'regenerated-item';
+                    item.innerHTML = `<div class="version-num">版本 ${i + 2}</div>${escapeHtml(v.content)}`;
+                    regenSection.appendChild(item);
+                });
+
+                wrapper.appendChild(regenSection);
+            }
+
+            // 操作按钮
+            const actions = document.createElement('div');
+            actions.className = 'message-actions';
+            actions.style.justifyContent = 'flex-start';
+            
+            const regenBtn = document.createElement('button');
+            regenBtn.className = 'message-action-btn';
+            regenBtn.textContent = '🔄 重新生成';
+            regenBtn.onclick = () => regenerateResponse(startIndex);
+            actions.appendChild(regenBtn);
+
+            wrapper.appendChild(actions);
+            container.appendChild(wrapper);
+        }
+
         // ========== 编辑消息 ==========
         async function editMessage(index) {
             const session = appState.sessions[appState.activeSessionId];
