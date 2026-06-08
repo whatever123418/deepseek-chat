@@ -1,0 +1,427 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>DeepSeek AI 助手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            display: flex;
+            gap: 8px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .user .avatar {
+            background: #667eea;
+        }
+
+        .assistant .avatar {
+            background: #10a37f;
+        }
+
+        .message-content {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.5;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .user .message-content {
+            background: #667eea;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .assistant .message-content {
+            background: white;
+            color: #333;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .input-area {
+            background: white;
+            padding: 12px 16px;
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            bottom: 0;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 10px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 24px;
+            outline: none;
+            font-size: 15px;
+            resize: none;
+            max-height: 120px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        #messageInput:focus {
+            border-color: #667eea;
+        }
+
+        #sendButton {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        #sendButton:active {
+            transform: scale(0.9);
+        }
+
+        #sendButton:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .api-config {
+            background: white;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            display: none;
+        }
+
+        .api-config.show {
+            display: block;
+        }
+
+        .api-config input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .config-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .header {
+            position: relative;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 DeepSeek AI</h1>
+        <button class="config-toggle" onclick="toggleConfig()">⚙️</button>
+    </div>
+
+    <div class="api-config" id="apiConfig">
+        <label style="font-size: 14px; color: #666;">API Key</label>
+        <input 
+            type="password" 
+            id="apiKey" 
+            placeholder="输入你的 DeepSeek API Key"
+            onchange="saveApiKey()"
+        >
+        <small style="color: #999; display: block; margin-top: 4px;">
+            你的API Key只保存在本地浏览器中
+        </small>
+    </div>
+
+    <div class="chat-container" id="chatContainer">
+        <div class="message assistant">
+            <div class="avatar">🤖</div>
+            <div class="message-content">
+                你好！我是DeepSeek AI助手。请先在设置中输入你的API Key，然后就可以开始对话了！😊
+            </div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <textarea 
+            id="messageInput" 
+            placeholder="输入消息..." 
+            rows="1"
+            onkeydown="handleKeyDown(event)"
+        ></textarea>
+        <button id="sendButton" onclick="sendMessage()">
+            <span>➤</span>
+        </button>
+    </div>
+
+    <script>
+        // 从localStorage加载API Key
+        let apiKey = localStorage.getItem('deepseek_api_key') || '';
+        
+        if (apiKey) {
+            document.getElementById('apiKey').value = apiKey;
+        }
+
+        function toggleConfig() {
+            const config = document.getElementById('apiConfig');
+            config.classList.toggle('show');
+        }
+
+        function saveApiKey() {
+            apiKey = document.getElementById('apiKey').value.trim();
+            localStorage.setItem('deepseek_api_key', apiKey);
+        }
+
+        // 自动调整输入框高度
+        document.getElementById('messageInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            if (!apiKey) {
+                alert('请先在设置中输入API Key');
+                toggleConfig();
+                return;
+            }
+
+            // 添加用户消息
+            addMessage(message, 'user');
+            input.value = '';
+            input.style.height = 'auto';
+
+            // 显示输入状态
+            const typingId = showTyping();
+            
+            // 禁用发送按钮
+            const sendButton = document.getElementById('sendButton');
+            sendButton.disabled = true;
+
+            try {
+                const response = await callDeepSeekAPI(message);
+                removeTyping(typingId);
+                addMessage(response, 'assistant');
+            } catch (error) {
+                removeTyping(typingId);
+                addMessage(`错误：${error.message}`, 'assistant', true);
+            } finally {
+                sendButton.disabled = false;
+            }
+        }
+
+        function addMessage(text, role, isError = false) {
+            const container = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'avatar';
+            avatar.textContent = role === 'user' ? '👤' : '🤖';
+            
+            const content = document.createElement('div');
+            content.className = `message-content ${isError ? 'error-message' : ''}`;
+            content.textContent = text;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            container.appendChild(messageDiv);
+            
+            // 滚动到底部
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function showTyping() {
+            const container = document.getElementById('chatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message assistant';
+            typingDiv.id = 'typing-' + Date.now();
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'avatar';
+            avatar.textContent = '🤖';
+            
+            const indicator = document.createElement('div');
+            indicator.className = 'message-content typing-indicator';
+            indicator.innerHTML = '<span></span><span></span><span></span>';
+            
+            typingDiv.appendChild(avatar);
+            typingDiv.appendChild(indicator);
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+            
+            return typingDiv.id;
+        }
+
+        function removeTyping(id) {
+            const typingDiv = document.getElementById(id);
+            if (typingDiv) {
+                typingDiv.remove();
+            }
+        }
+
+        async function callDeepSeekAPI(message) {
+            const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'deepseek-chat',
+                    messages: [
+                        {
+                            role: 'user',
+                            content: message
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 2000
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error?.message || '请求失败');
+            }
+
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+    </script>
+</body>
+</html>
