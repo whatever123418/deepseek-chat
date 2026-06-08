@@ -4,164 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>DeepSeek AI 全能助手</title>
-    /* ========== DeepSeek 风格编辑框 ========== */
-.edit-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 250;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    animation: fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.edit-dialog {
-    background: white;
-    border-radius: 20px 20px 0 0;
-    width: 100%;
-    max-width: 600px;
-    max-height: 80vh;
-    display: flex;
-    flex-direction: column;
-    animation: slideUp 0.3s ease;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-}
-
-@keyframes slideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-}
-
-.edit-dialog-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.edit-dialog-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-}
-
-.edit-dialog-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #999;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 50%;
-}
-
-.edit-dialog-close:active {
-    background: #f5f5f5;
-}
-
-.edit-dialog-body {
-    padding: 16px 20px;
-    flex: 1;
-    overflow-y: auto;
-}
-
-.edit-textarea {
-    width: 100%;
-    min-height: 80px;
-    max-height: 40vh;
-    border: 2px solid #667eea;
-    border-radius: 12px;
-    padding: 14px;
-    font-size: 15px;
-    font-family: inherit;
-    line-height: 1.6;
-    resize: vertical;
-    outline: none;
-    color: #333;
-    background: #fafbff;
-}
-
-.edit-textarea:focus {
-    background: white;
-}
-
-.edit-dialog-footer {
-    display: flex;
-    gap: 12px;
-    padding: 16px 20px;
-    border-top: 1px solid #f0f0f0;
-}
-
-.edit-btn-cancel {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    background: white;
-    color: #666;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.edit-btn-cancel:active {
-    background: #f5f5f5;
-}
-
-.edit-btn-save {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.edit-btn-save:active {
-    transform: scale(0.97);
-    opacity: 0.9;
-}
-
-/* 消息点击效果 */
-.message-wrapper .message-content {
-    transition: all 0.2s;
-    cursor: default;
-}
-
-.message.user .message-content:active {
-    transform: scale(0.98);
-    opacity: 0.8;
-}
-
-/* 原编辑历史徽章调整 */
-.edit-history-badge {
-    display: inline-block;
-    background: rgba(255,255,255,0.3);
-    color: white;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 10px;
-    margin-bottom: 6px;
-    cursor: pointer;
-}
-
-.edit-history-badge:active {
-    background: rgba(255,255,255,0.5);
-}
     <style>
         :root {
             --bg-user-bubble: #667eea;
@@ -977,16 +819,6 @@
 
             const content = document.createElement('div');
             content.className = 'message-content';
-            // 点击用户消息可直接编辑
-content.addEventListener('click', function(e) {
-    // 如果点击的是编辑历史徽章，不触发编辑
-    if (e.target.classList.contains('edit-history-badge') || 
-        e.target.closest('.edit-history-panel')) {
-        return;
-    }
-    editMessage(index);
-});
-content.style.cursor = 'pointer';
 
             // 显示编辑历史
             let contentHTML = '';
@@ -1082,109 +914,34 @@ content.style.cursor = 'pointer';
         }
 
         // ========== 编辑消息 ==========
-// ========== DeepSeek 风格编辑消息 ==========
-function editMessage(index) {
-    const session = appState.sessions[appState.activeSessionId];
-    if (!session) return;
-    const msg = session.messages[index];
-    if (!msg || msg.role !== 'user') return;
+        async function editMessage(index) {
+            const session = appState.sessions[appState.activeSessionId];
+            if (!session) return;
+            const msg = session.messages[index];
+            if (!msg || msg.role !== 'user') return;
 
-    // 创建编辑弹窗
-    const overlay = document.createElement('div');
-    overlay.className = 'edit-overlay';
-    overlay.id = 'editOverlay';
+            const newContent = prompt('编辑消息（修改后会自动重新生成AI回复）:', msg.content);
+            if (newContent === null || newContent.trim() === '') return;
+            if (newContent.trim() === msg.content) return;
 
-    const dialog = document.createElement('div');
-    dialog.className = 'edit-dialog';
+            // 保存编辑历史
+            if (!msg.editHistory) msg.editHistory = [];
+            msg.editHistory.push({
+                oldContent: msg.content,
+                editedAt: new Date().toISOString()
+            });
+            msg.content = newContent.trim();
 
-    // 弹窗头部
-    const header = document.createElement('div');
-    header.className = 'edit-dialog-header';
-    header.innerHTML = `
-        <span class="edit-dialog-title">✏️ 编辑消息</span>
-        <button class="edit-dialog-close" onclick="closeEditDialog()">✕</button>
-    `;
+            // 删除此消息之后的所有消息（包括重新生成的版本）
+            session.messages = session.messages.slice(0, index + 1);
+            // 清除编辑标记后的重新生成版本
+            session.messages = session.messages.filter(m => !m._isRegenerated || session.messages.indexOf(m) <= index);
 
-    // 弹窗主体
-    const body = document.createElement('div');
-    body.className = 'edit-dialog-body';
-    
-    const textarea = document.createElement('textarea');
-    textarea.className = 'edit-textarea';
-    textarea.value = msg.content;
-    textarea.placeholder = '输入消息...';
-    // 自动聚焦并选中全部文字
-    setTimeout(() => {
-        textarea.focus();
-        textarea.setSelectionRange(0, textarea.value.length);
-    }, 300);
-
-    body.appendChild(textarea);
-
-    // 弹窗底部按钮
-    const footer = document.createElement('div');
-    footer.className = 'edit-dialog-footer';
-    
-    const cancelBtn = document.createElement('button');
-    cancelBtn.className = 'edit-btn-cancel';
-    cancelBtn.textContent = '取消';
-    cancelBtn.onclick = closeEditDialog;
-
-    const saveBtn = document.createElement('button');
-    saveBtn.className = 'edit-btn-save';
-    saveBtn.textContent = '保存并重新生成';
-    saveBtn.onclick = async () => {
-        const newContent = textarea.value.trim();
-        if (!newContent) {
-            showToast('⚠️ 消息不能为空');
-            return;
+            await updateSessionInfo(appState.activeSessionId);
+            renderChat();
+            showToast('✏️ 消息已修改，正在重新生成回复...');
+            await autoRegenerate();
         }
-        if (newContent === msg.content) {
-            closeEditDialog();
-            return;
-        }
-
-        // 保存编辑历史
-        if (!msg.editHistory) msg.editHistory = [];
-        msg.editHistory.push({
-            oldContent: msg.content,
-            editedAt: new Date().toISOString()
-        });
-        msg.content = newContent;
-
-        // 删除后续消息
-        session.messages = session.messages.slice(0, index + 1);
-
-        await updateSessionInfo(appState.activeSessionId);
-        closeEditDialog();
-        renderChat();
-        showToast('✏️ 消息已修改，正在重新生成...');
-        await autoRegenerate();
-    };
-
-    footer.appendChild(cancelBtn);
-    footer.appendChild(saveBtn);
-
-    dialog.appendChild(header);
-    dialog.appendChild(body);
-    dialog.appendChild(footer);
-    overlay.appendChild(dialog);
-
-    // 点击遮罩关闭
-    overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) closeEditDialog();
-    });
-
-    document.body.appendChild(overlay);
-}
-
-function closeEditDialog() {
-    const overlay = document.getElementById('editOverlay');
-    if (overlay) {
-        overlay.style.opacity = '0';
-        setTimeout(() => overlay.remove(), 200);
-    }
-}
 
         // ========== 重新生成回答 ==========
         async function regenerateResponse(index) {
