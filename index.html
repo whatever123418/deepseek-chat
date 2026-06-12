@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=yes">
   <title>DeepSeek AI 全能助手</title>
   <style>
-    /* ===== 前面所有样式保持不变 ===== */
     * {
       margin: 0;
       padding: 0;
@@ -183,6 +182,7 @@
     .bubble:active { opacity: 0.85; }
     .user .bubble { background: #1f3a5f; }
     
+    /* 消息操作菜单 - 默认隐藏 */
     .message-actions {
       display: none;
       gap: 4px;
@@ -192,7 +192,9 @@
       align-items: center;
       animation: fadeIn 0.15s ease;
     }
-    .message-actions.visible { display: flex; }
+    .message-actions.visible {
+      display: flex;
+    }
     .action-btn {
       background: rgba(255,255,255,0.1);
       border: 1px solid rgba(255,255,255,0.2);
@@ -269,11 +271,17 @@
       font-size: 0.95rem;
       outline: none;
       line-height: 1.4;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      overflow-y: auto;
+      /* 隐藏滚动条 */
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
+      overflow-y: auto; /* 保留滚动功能 */
     }
-    textarea::-webkit-scrollbar { display: none; width: 0; height: 0; }
+    /* 隐藏 WebKit 浏览器滚动条 */
+    textarea::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
     
     .send-btn {
       background: #2a4a7f;
@@ -294,61 +302,6 @@
       cursor: pointer;
       font-size: 1rem;
     }
-    
-    /* 语音按钮样式 */
-    .voice-btn {
-      background: #2a2a2a;
-      border: 1px solid #444;
-      color: white;
-      padding: 10px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: all 0.2s ease;
-      position: relative;
-    }
-    .voice-btn.listening {
-      background: #ff4444;
-      border-color: #ff4444;
-      animation: pulse 1.5s ease-in-out infinite;
-    }
-    .voice-btn.speaking {
-      background: #4CAF50;
-      border-color: #4CAF50;
-    }
-    .voice-mode-indicator {
-      position: fixed;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255,68,68,0.9);
-      color: white;
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      z-index: 300;
-      display: none;
-      align-items: center;
-      gap: 8px;
-    }
-    .voice-mode-indicator.active { display: flex; }
-    .voice-wave {
-      display: flex;
-      gap: 2px;
-      align-items: flex-end;
-      height: 20px;
-    }
-    .voice-wave span {
-      width: 3px;
-      background: white;
-      border-radius: 3px;
-      animation: wave 0.8s ease-in-out infinite;
-    }
-    .voice-wave span:nth-child(2) { animation-delay: 0.1s; }
-    .voice-wave span:nth-child(3) { animation-delay: 0.2s; }
-    .voice-wave span:nth-child(4) { animation-delay: 0.3s; }
-    .voice-wave span:nth-child(5) { animation-delay: 0.4s; }
-    
     .toast {
       position: fixed;
       bottom: 80px;
@@ -390,31 +343,6 @@
       color: #fff;
     }
     
-    /* 音色预览按钮 */
-    .voice-preview-btn {
-      background: #2a4a7f;
-      border: none;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      margin-left: 8px;
-    }
-    .voice-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 4px;
-    }
-    .voice-tag {
-      background: #2a2a2a;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      color: #8ab4f8;
-    }
-    
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -423,25 +351,10 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0.4); }
-      50% { box-shadow: 0 0 0 10px rgba(255,68,68,0); }
-    }
-    @keyframes wave {
-      0%, 100% { height: 4px; }
-      50% { height: 16px; }
-    }
   </style>
 </head>
 <body>
 <div id="app">
-  <div class="voice-mode-indicator" id="voiceIndicator">
-    <span id="voiceStatusText">🎤 正在聆听...</span>
-    <div class="voice-wave">
-      <span></span><span></span><span></span><span></span><span></span>
-    </div>
-  </div>
-
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <h3>会话列表</h3>
@@ -462,10 +375,9 @@
     <div class="messages-container" id="messagesContainer"></div>
     <div id="filePreviewArea" style="padding:0 12px;"></div>
     <div class="input-area">
-      <textarea id="userInput" rows="1" placeholder="输入消息... (语音按钮说话)"></textarea>
+      <textarea id="userInput" rows="1" placeholder="输入消息... (Enter发送)"></textarea>
       <input type="file" id="fileInput" accept=".txt,.pdf,.md,.json,.csv,.html,.css,.js,.py,.log,.xml,.yaml,.yml" style="display:none">
       <button class="attach-btn" id="attachBtn">📎</button>
-      <button class="voice-btn" id="voiceBtn" title="语音输入">🎤</button>
       <button class="send-btn" id="sendBtn">发送</button>
     </div>
   </div>
@@ -476,36 +388,6 @@
     <div class="setting-row"><label>模型</label><select id="modelSelect"><option value="deepseek-chat">deepseek-chat</option><option value="deepseek-reasoner">deepseek-reasoner (R1)</option></select></div>
     <div class="setting-row"><label>Temperature (<span id="tempValue">0.7</span>)</label><input type="range" id="tempRange" min="0" max="2" step="0.1" value="0.7"></div>
     <div class="setting-row"><label>深度思考模式</label><input type="checkbox" id="deepThinkCheck"></div>
-    
-    <!-- 语音设置分组 -->
-    <div style="border-top:1px solid #333; margin:16px 0; padding-top:16px;">
-      <h5 style="color:#8ab4f8; margin-bottom:12px;">🎙️ 语音设置</h5>
-      <div class="setting-row"><label>自动朗读AI回复</label><input type="checkbox" id="autoSpeakCheck" checked></div>
-      <div class="setting-row"><label>连续对话模式</label><input type="checkbox" id="continuousVoiceCheck"><small style="color:#888;">（听完回复后自动继续聆听）</small></div>
-      <div class="setting-row"><label>语音识别语言</label><select id="voiceLangSelect"><option value="zh-CN">中文（普通话）</option><option value="en-US">English</option><option value="ja-JP">日本語</option></select></div>
-      
-      <!-- AI音色选择 -->
-      <div class="setting-row">
-        <label>AI 音色</label>
-        <select id="voiceSelect">
-          <option value="">加载中...</option>
-        </select>
-        <div class="voice-info" id="voiceInfo"></div>
-      </div>
-      
-      <div class="setting-row">
-        <label>语速 (<span id="rateValue">1.0</span>x)</label>
-        <input type="range" id="rateRange" min="0.5" max="2" step="0.1" value="1.0">
-      </div>
-      
-      <div class="setting-row">
-        <label>音调 (<span id="pitchValue">1.0</span>)</label>
-        <input type="range" id="pitchRange" min="0.5" max="2" step="0.1" value="1.0">
-      </div>
-      
-      <button id="previewVoiceBtn" class="voice-preview-btn" style="width:100%; padding:10px;">🔊 试听当前音色</button>
-    </div>
-    
     <div class="setting-row"><label>用户头像(emoji)</label><input id="userAvatarInput" value="😀"></div>
     <div class="setting-row"><label>AI头像(emoji)</label><input id="aiAvatarInput" value="🤖"></div>
     <div class="setting-row"><label>背景类型</label><select id="bgTypeSelect"><option value="color">纯色</option><option value="gradient">渐变</option><option value="image">图片URL</option></select></div>
@@ -535,338 +417,13 @@
       assistantAvatar: '🤖',
       activeSessionId: null,
       sessions: {},
-      sessionOrder: [],
-      autoSpeak: true,
-      continuousVoice: false,
-      voiceLang: 'zh-CN',
-      selectedVoiceURI: '', // 新增：选中的音色URI
-      voiceRate: 1.0,       // 新增：语速
-      voicePitch: 1.0       // 新增：音调
+      sessionOrder: []
     };
     
     let currentFile = null;
     let isStreaming = false;
     let activeMenuMessageId = null;
-    
-    // ========== 语音模块 ==========
-    let recognition = null;
-    let isListening = false;
-    let isSpeaking = false;
-    let speechSynthesis = window.speechSynthesis;
-    let currentUtterance = null;
-    let availableVoices = [];
-    
-    // 获取所有可用音色
-    function loadVoices() {
-      availableVoices = speechSynthesis.getVoices();
-      
-      // 如果getVoices()返回空数组，等待onvoiceschanged事件
-      if (availableVoices.length === 0) {
-        return new Promise((resolve) => {
-          speechSynthesis.onvoiceschanged = () => {
-            availableVoices = speechSynthesis.getVoices();
-            resolve(availableVoices);
-          };
-        });
-      }
-      return Promise.resolve(availableVoices);
-    }
-    
-    // 更新音色选择下拉框
-    async function updateVoiceSelect() {
-      await loadVoices();
-      const select = document.getElementById('voiceSelect');
-      select.innerHTML = '';
-      
-      // 按语言分组
-      const grouped = {};
-      availableVoices.forEach(voice => {
-        const lang = voice.lang.split('-')[0];
-        if (!grouped[lang]) grouped[lang] = [];
-        grouped[lang].push(voice);
-      });
-      
-      // 优先显示中文音色
-      const preferredLangs = ['zh', 'en', 'ja'];
-      preferredLangs.forEach(lang => {
-        if (grouped[lang]) {
-          const optgroup = document.createElement('optgroup');
-          optgroup.label = getLangName(lang);
-          grouped[lang].forEach(voice => {
-            const option = document.createElement('option');
-            option.value = voice.voiceURI;
-            option.textContent = `${voice.name} ${voice.lang}`;
-            if (voice.voiceURI === appState.selectedVoiceURI) {
-              option.selected = true;
-            }
-            optgroup.appendChild(option);
-          });
-          select.appendChild(optgroup);
-        }
-      });
-      
-      // 其他语言
-      Object.keys(grouped).forEach(lang => {
-        if (!preferredLangs.includes(lang)) {
-          const optgroup = document.createElement('optgroup');
-          optgroup.label = getLangName(lang);
-          grouped[lang].forEach(voice => {
-            const option = document.createElement('option');
-            option.value = voice.voiceURI;
-            option.textContent = `${voice.name} ${voice.lang}`;
-            if (voice.voiceURI === appState.selectedVoiceURI) {
-              option.selected = true;
-            }
-            optgroup.appendChild(option);
-          });
-          select.appendChild(optgroup);
-        }
-      });
-      
-      // 设置默认音色（如果没有选择）
-      if (!appState.selectedVoiceURI && availableVoices.length > 0) {
-        // 优先选择中文女声
-        const zhVoice = availableVoices.find(v => v.lang.startsWith('zh') && v.name.includes('Female')) ||
-                        availableVoices.find(v => v.lang.startsWith('zh')) ||
-                        availableVoices[0];
-        select.value = zhVoice.voiceURI;
-        appState.selectedVoiceURI = zhVoice.voiceURI;
-        saveState();
-      }
-      
-      updateVoiceInfo();
-    }
-    
-    function getLangName(lang) {
-      const names = {
-        'zh': '🇨🇳 中文',
-        'en': '🇺🇸 English',
-        'ja': '🇯🇵 日本語',
-        'ko': '🇰🇷 한국어',
-        'fr': '🇫🇷 Français',
-        'de': '🇩🇪 Deutsch',
-        'es': '🇪🇸 Español',
-        'ru': '🇷🇺 Русский',
-        'ar': '🇸🇦 العربية',
-        'hi': '🇮🇳 हिन्दी'
-      };
-      return names[lang] || `🌐 ${lang}`;
-    }
-    
-    function updateVoiceInfo() {
-      const uri = appState.selectedVoiceURI;
-      const voice = availableVoices.find(v => v.voiceURI === uri);
-      const infoDiv = document.getElementById('voiceInfo');
-      if (voice) {
-        const isLocal = voice.localService ? '本地音色' : '网络音色';
-        const gender = voice.name.includes('Female') || voice.name.includes('女') ? '👩 女声' :
-                       voice.name.includes('Male') || voice.name.includes('男') ? '👨 男声' : '🤖';
-        infoDiv.innerHTML = `
-          <span class="voice-tag">${gender}</span>
-          <span class="voice-tag">${isLocal}</span>
-          <span class="voice-tag">${voice.lang}</span>
-        `;
-      }
-    }
-    
-    // 语音朗读（使用自定义音色）
-    function speakText(text) {
-      if (!appState.autoSpeak) return;
-      
-      let cleanText = text
-        .replace(/```[\s\S]*?```/g, '代码块已省略')
-        .replace(/`([^`]+)`/g, '$1')
-        .replace(/\*\*([^*]+)\*\*/g, '$1')
-        .replace(/\*([^*]+)\*/g, '$1')
-        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-        .replace(/#{1,6}\s/g, '')
-        .replace(/[-*+]\s/g, '')
-        .substring(0, 500);
-      
-      if (!cleanText.trim()) return;
-      
-      stopSpeaking();
-      
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      
-      // 设置选择的音色
-      const selectedVoice = availableVoices.find(v => v.voiceURI === appState.selectedVoiceURI);
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
-      }
-      
-      utterance.lang = appState.voiceLang;
-      utterance.rate = appState.voiceRate || 1.0;
-      utterance.pitch = appState.voicePitch || 1.0;
-      utterance.volume = 1.0;
-      
-      utterance.onstart = () => {
-        isSpeaking = true;
-        const voiceBtn = document.getElementById('voiceBtn');
-        voiceBtn.classList.add('speaking');
-        voiceBtn.textContent = '🔊';
-        document.getElementById('voiceStatusText').textContent = '🔊 AI正在说话...';
-        document.getElementById('voiceIndicator').classList.add('active');
-      };
-      
-      utterance.onend = () => {
-        isSpeaking = false;
-        const voiceBtn = document.getElementById('voiceBtn');
-        voiceBtn.classList.remove('speaking');
-        voiceBtn.textContent = '🎤';
-        document.getElementById('voiceIndicator').classList.remove('active');
-        
-        if (appState.continuousVoice) {
-          setTimeout(() => startListening(), 300);
-        }
-      };
-      
-      utterance.onerror = () => {
-        isSpeaking = false;
-        document.getElementById('voiceBtn').classList.remove('speaking');
-        document.getElementById('voiceIndicator').classList.remove('active');
-      };
-      
-      currentUtterance = utterance;
-      speechSynthesis.speak(utterance);
-    }
-    
-    // 试听当前音色
-    function previewVoice() {
-      const previewText = document.getElementById('voiceLangSelect').value === 'en-US' ? 
-        'Hello! This is a voice preview.' :
-        document.getElementById('voiceLangSelect').value === 'ja-JP' ?
-        'こんにちは、これは音声プレビューです。' :
-        '你好！这是AI语音音色预览。';
-      
-      const utterance = new SpeechSynthesisUtterance(previewText);
-      
-      const selectedVoice = availableVoices.find(v => v.voiceURI === appState.selectedVoiceURI);
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
-      }
-      
-      utterance.lang = appState.voiceLang;
-      utterance.rate = appState.voiceRate || 1.0;
-      utterance.pitch = appState.voicePitch || 1.0;
-      utterance.volume = 1.0;
-      
-      speechSynthesis.cancel(); // 停止当前朗读
-      speechSynthesis.speak(utterance);
-      
-      const selectedOption = document.getElementById('voiceSelect').selectedOptions[0];
-      showToast(`试听: ${selectedOption?.textContent || '当前音色'}`);
-    }
-    
-    function stopSpeaking() {
-      if (speechSynthesis.speaking) {
-        speechSynthesis.cancel();
-      }
-      isSpeaking = false;
-      document.getElementById('voiceBtn').classList.remove('speaking');
-      document.getElementById('voiceIndicator').classList.remove('active');
-    }
-    
-    // 初始化语音识别
-    function initSpeechRecognition() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        showToast('您的浏览器不支持语音识别，请使用Chrome浏览器');
-        return null;
-      }
-      
-      const recog = new SpeechRecognition();
-      recog.continuous = false;
-      recog.interimResults = false;
-      recog.lang = appState.voiceLang || 'zh-CN';
-      recog.maxAlternatives = 1;
-      
-      recog.onresult = (event) => {
-        const transcript = event.results[0][0].transcript.trim();
-        if (transcript) {
-          document.getElementById('userInput').value = transcript;
-          showToast(`识别: "${transcript}"`);
-          
-          if (appState.continuousVoice || document.getElementById('voiceBtn').dataset.autoSend === 'true') {
-            setTimeout(() => sendMessage(), 300);
-          }
-        }
-        stopListening();
-      };
-      
-      recog.onerror = (event) => {
-        console.error('语音识别错误:', event.error);
-        let errorMsg = '语音识别失败';
-        switch(event.error) {
-          case 'not-allowed': errorMsg = '请允许使用麦克风'; break;
-          case 'no-speech': errorMsg = '未检测到语音'; break;
-          case 'network': errorMsg = '网络错误，请检查连接'; break;
-        }
-        showToast(errorMsg);
-        stopListening();
-      };
-      
-      recog.onend = () => {
-        stopListening();
-        if (appState.continuousVoice && isSpeaking === false) {
-          setTimeout(() => startListening(), 500);
-        }
-      };
-      
-      return recog;
-    }
-    
-    function startListening() {
-      if (isSpeaking) stopSpeaking();
-      if (!recognition) recognition = initSpeechRecognition();
-      if (!recognition) return;
-      
-      try {
-        recognition.lang = appState.voiceLang;
-        recognition.start();
-        isListening = true;
-        
-        const voiceBtn = document.getElementById('voiceBtn');
-        voiceBtn.classList.add('listening');
-        voiceBtn.textContent = '🔴';
-        
-        const indicator = document.getElementById('voiceIndicator');
-        indicator.classList.add('active');
-        document.getElementById('voiceStatusText').textContent = '🎤 正在聆听...';
-        
-      } catch (e) {
-        console.error('启动语音识别失败:', e);
-        showToast('语音识别启动失败');
-        stopListening();
-      }
-    }
-    
-    function stopListening() {
-      if (recognition) {
-        try { recognition.stop(); } catch(e) {}
-      }
-      isListening = false;
-      
-      const voiceBtn = document.getElementById('voiceBtn');
-      voiceBtn.classList.remove('listening');
-      voiceBtn.textContent = '🎤';
-      voiceBtn.dataset.autoSend = 'false';
-      
-      const indicator = document.getElementById('voiceIndicator');
-      indicator.classList.remove('active');
-    }
-    
-    function toggleVoiceMode() {
-      if (isListening) {
-        stopListening();
-      } else if (isSpeaking) {
-        stopSpeaking();
-      } else {
-        startListening();
-      }
-    }
 
-    // ========== 数据库操作（保持不变） ==========
     function openDB() {
       return new Promise((resolve, reject) => {
         const request = indexedDB.open(DB_NAME, 1);
@@ -922,7 +479,7 @@
     }
     function msgId(sessionId, msgIndex) { return `${sessionId}_${msgIndex}`; }
 
-    // ========== 会话管理（保持不变） ==========
+    // ========== 会话管理 ==========
     function createSession(title = '新对话') {
       const id = generateId();
       const session = { id, title, messages: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
@@ -946,7 +503,7 @@
       }
     }
 
-    // ========== 消息核心操作（保持不变） ==========
+    // ========== 消息核心操作 ==========
     function getUserMessageDisplayContent(msg) {
       if (!msg._hasEdits || !msg.editHistory || msg.editHistory.length === 0) return msg.content;
       const idx = msg._currentVersionIndex ?? msg.editHistory.length;
@@ -1037,7 +594,7 @@
       return true;
     }
 
-    // ========== API调用（保持不变） ==========
+    // ========== API调用 ==========
     async function callDeepSeekAPI(messages) {
       if (!appState.apiKey) throw new Error('请先在设置中配置API Key');
       const model = appState.deepThink ? 'deepseek-reasoner' : appState.model;
@@ -1057,7 +614,7 @@
       return data.choices[0].message.content;
     }
 
-    // ========== 发送消息（修改：添加音色朗读） ==========
+    // ========== 发送消息 ==========
     async function sendMessage() {
       if (isStreaming) { showToast('请等待当前回复完成'); return; }
       const text = document.getElementById('userInput').value.trim();
@@ -1095,19 +652,12 @@
       
       try {
         const reply = await callDeepSeekAPI(contextMsgs);
-        const assistantMsg = {
+        session.messages.push({
           role: 'assistant', content: reply, isError: false,
           _isRegenerated: false, regeneratedVersions: [], _currentRegeneratedIndex: 0
-        };
-        session.messages.push(assistantMsg);
+        });
         session.updatedAt = new Date().toISOString();
         saveState();
-        renderChat();
-        
-        // 使用自定义音色朗读
-        if (appState.autoSpeak && reply) {
-          speakText(reply);
-        }
       } catch (e) {
         session.messages.push({ role: 'assistant', content: e.message, isError: true });
         session.updatedAt = new Date().toISOString();
@@ -1144,8 +694,6 @@
         });
         session.updatedAt = new Date().toISOString();
         saveState();
-        renderChat();
-        if (appState.autoSpeak && reply) speakText(reply);
       } catch (e) {
         session.messages.push({ role: 'assistant', content: e.message, isError: true });
         session.updatedAt = new Date().toISOString();
@@ -1167,7 +715,7 @@
       renderChat();
     }
 
-    // ========== UI渲染（保持不变） ==========
+    // ========== UI渲染 ==========
     function renderSessionList(filter = '') {
       const list = document.getElementById('sessionList');
       list.innerHTML = '';
@@ -1318,7 +866,7 @@
     function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
 
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.bubble') && !e.target.closest('.message-actions') && !e.target.closest('.voice-btn')) {
+      if (!e.target.closest('.bubble') && !e.target.closest('.message-actions')) {
         if (activeMenuMessageId !== null) {
           activeMenuMessageId = null;
           renderChat();
@@ -1334,18 +882,6 @@
     document.getElementById('searchSessionInput').oninput = (e) => renderSessionList(e.target.value);
     document.getElementById('sendBtn').onclick = sendMessage;
     document.getElementById('attachBtn').onclick = () => document.getElementById('fileInput').click();
-    
-    // 语音按钮
-    document.getElementById('voiceBtn').onclick = toggleVoiceMode;
-    document.getElementById('voiceBtn').addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      document.getElementById('voiceBtn').dataset.autoSend = 'true';
-      if (!isListening && !isSpeaking) startListening();
-    });
-    document.getElementById('voiceBtn').addEventListener('touchend', () => {
-      document.getElementById('voiceBtn').dataset.autoSend = 'false';
-    });
-    
     document.getElementById('fileInput').onchange = async (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -1365,42 +901,10 @@
     document.getElementById('settingsBtn').onclick = () => document.getElementById('settingsPanel').classList.toggle('active');
     document.getElementById('closeSettingsBtn').onclick = () => document.getElementById('settingsPanel').classList.remove('active');
     
-    // 基础设置
     document.getElementById('apiKeyInput').onchange = function() { appState.apiKey=this.value; saveState(); };
     document.getElementById('modelSelect').onchange = function() { appState.model=this.value; saveState(); };
     document.getElementById('tempRange').oninput = function() { appState.temperature=+this.value; document.getElementById('tempValue').textContent=this.value; saveState(); };
     document.getElementById('deepThinkCheck').onchange = function() { appState.deepThink=this.checked; saveState(); };
-    
-    // 语音设置
-    document.getElementById('autoSpeakCheck').onchange = function() { appState.autoSpeak=this.checked; saveState(); };
-    document.getElementById('continuousVoiceCheck').onchange = function() { appState.continuousVoice=this.checked; saveState(); };
-    document.getElementById('voiceLangSelect').onchange = function() { appState.voiceLang=this.value; saveState(); };
-    
-    // 音色选择
-    document.getElementById('voiceSelect').onchange = function() {
-      appState.selectedVoiceURI = this.value;
-      saveState();
-      updateVoiceInfo();
-    };
-    
-    // 语速调节
-    document.getElementById('rateRange').oninput = function() {
-      appState.voiceRate = parseFloat(this.value);
-      document.getElementById('rateValue').textContent = this.value;
-      saveState();
-    };
-    
-    // 音调调节
-    document.getElementById('pitchRange').oninput = function() {
-      appState.voicePitch = parseFloat(this.value);
-      document.getElementById('pitchValue').textContent = this.value;
-      saveState();
-    };
-    
-    // 试听按钮
-    document.getElementById('previewVoiceBtn').onclick = previewVoice;
-    
-    // 其他设置
     document.getElementById('userAvatarInput').onchange = function() { appState.userAvatar=this.value||'😀'; saveState(); renderChat(); };
     document.getElementById('aiAvatarInput').onchange = function() { appState.assistantAvatar=this.value||'🤖'; saveState(); renderChat(); };
     document.getElementById('bgTypeSelect').onchange = function() { appState.bgType=this.value; saveState(); applyBackground(); };
@@ -1420,24 +924,13 @@
           if (data.sessions) {
             Object.keys(data.sessions).forEach(id => { if (!appState.sessions[id]) { appState.sessions[id]=data.sessions[id]; appState.sessionOrder.push(id); } });
             if (confirm('同时导入设置？')) {
-              ['apiKey','model','temperature','deepThink','bgType','bgValue','userAvatar','assistantAvatar','autoSpeak','continuousVoice','voiceLang','selectedVoiceURI','voiceRate','voicePitch'].forEach(k => { if (data[k]!==undefined) appState[k]=data[k]; });
+              ['apiKey','model','temperature','deepThink','bgType','bgValue','userAvatar','assistantAvatar'].forEach(k => { if (data[k]!==undefined) appState[k]=data[k]; });
             }
             appState.activeSessionId = data.activeSessionId || appState.sessionOrder[0];
             saveState(); renderSessionList(); renderChat();
-            // 恢复设置界面
-            document.getElementById('apiKeyInput').value=appState.apiKey; 
-            document.getElementById('modelSelect').value=appState.model;
-            document.getElementById('tempRange').value=appState.temperature; 
-            document.getElementById('tempValue').textContent=appState.temperature;
+            document.getElementById('apiKeyInput').value=appState.apiKey; document.getElementById('modelSelect').value=appState.model;
+            document.getElementById('tempRange').value=appState.temperature; document.getElementById('tempValue').textContent=appState.temperature;
             document.getElementById('deepThinkCheck').checked=appState.deepThink;
-            document.getElementById('autoSpeakCheck').checked=appState.autoSpeak !== false;
-            document.getElementById('continuousVoiceCheck').checked=appState.continuousVoice || false;
-            document.getElementById('voiceLangSelect').value=appState.voiceLang || 'zh-CN';
-            document.getElementById('rateRange').value=appState.voiceRate || 1.0;
-            document.getElementById('rateValue').textContent=appState.voiceRate || 1.0;
-            document.getElementById('pitchRange').value=appState.voicePitch || 1.0;
-            document.getElementById('pitchValue').textContent=appState.voicePitch || 1.0;
-            await updateVoiceSelect();
             showToast('导入成功');
           }
         } catch { showToast('文件无效'); }
@@ -1449,31 +942,17 @@
     (async () => {
       await openDB();
       await loadState();
-      
-      // 加载音色列表
-      await updateVoiceSelect();
-      
       if (!Object.keys(appState.sessions).length) createSession('欢迎使用');
       if (!appState.activeSessionId || !appState.sessions[appState.activeSessionId]) appState.activeSessionId = appState.sessionOrder[0];
-      
-      // 恢复设置界面值
       document.getElementById('apiKeyInput').value = appState.apiKey || '';
       document.getElementById('modelSelect').value = appState.model;
       document.getElementById('tempRange').value = appState.temperature;
       document.getElementById('tempValue').textContent = appState.temperature;
       document.getElementById('deepThinkCheck').checked = appState.deepThink;
-      document.getElementById('autoSpeakCheck').checked = appState.autoSpeak !== false;
-      document.getElementById('continuousVoiceCheck').checked = appState.continuousVoice || false;
-      document.getElementById('voiceLangSelect').value = appState.voiceLang || 'zh-CN';
-      document.getElementById('rateRange').value = appState.voiceRate || 1.0;
-      document.getElementById('rateValue').textContent = appState.voiceRate || 1.0;
-      document.getElementById('pitchRange').value = appState.voicePitch || 1.0;
-      document.getElementById('pitchValue').textContent = appState.voicePitch || 1.0;
       document.getElementById('userAvatarInput').value = appState.userAvatar;
       document.getElementById('aiAvatarInput').value = appState.assistantAvatar;
       document.getElementById('bgTypeSelect').value = appState.bgType;
       document.getElementById('bgValueInput').value = appState.bgValue || '';
-      
       renderSessionList();
       renderChat();
       applyBackground();
