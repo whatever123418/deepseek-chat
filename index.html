@@ -140,6 +140,18 @@
       position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
       background: #333; color: white; padding: 8px 20px; border-radius: 20px; font-size: 0.9rem; z-index: 200; opacity: 0.9; pointer-events: none;
     }
+    .context-indicator {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.8);
+      color: #8ab4f8;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      z-index: 50;
+      pointer-events: none;
+    }
     .settings-panel {
       position: fixed; bottom: 0; left: 0; width: 100%; background: #121212; z-index: 110;
       padding: 20px; border-radius: 20px 20px 0 0; color: #eee; max-height: 80vh; overflow-y: auto;
@@ -169,6 +181,7 @@
       <button class="settings-btn" id="settingsBtn">⚙️</button>
     </div>
     <div class="messages-container" id="messagesContainer"></div>
+    <div class="context-indicator" id="contextIndicator" style="display:none;"></div>
     <div id="filePreviewArea" style="padding:0 12px;"></div>
     <div class="input-area">
       <textarea id="userInput" rows="1" placeholder="输入消息... (Enter发送)"></textarea>
@@ -254,11 +267,7 @@
   }
   function renameSession(id,title){ if(appState.sessions[id]&&title.trim()){appState.sessions[id].title=title.trim();saveState();renderSessionList();renderChat();} }
 
-  // ========== 核心数据结构 ==========
-  // 用户消息: { role:'user', content:'最新版本', versions:[{content:v1},{content:v2},...], currentVersionIndex:1 }
-  // AI消息:   { role:'assistant', versions:[{content:v1},{content:v2},...], currentVersionIndex:1, pairedWithUserVersion:1 }
-  // pairedWithUserVersion: 当用户消息切换到版本X时，AI回答自动切换到对应的版本
-
+  // ========== 显示内容获取 ==========
   function getUserDisplayContent(msg) {
     if(!msg.versions||msg.versions.length===0) return msg.content||'';
     const idx=msg.currentVersionIndex??(msg.versions.length-1);
@@ -278,41 +287,76 @@
     return msg.currentVersionIndex??(msg.versions.length-1);
   }
 
-  // ========== 编辑用户消息（保留所有版本）==========
+  // ========== 【核心】构建完整的上下文消息数组 ==========
+  // 从第一条消息到指定索引之前的所有消息，使用各自当前查看的版本内容
+  function buildContextMessages(session, upToIndex) {
+    const contextMessages = [];
+    // upToIndex 是开区间，不包含 upToIndex 本身
+    // 如果 upToIndex 未指定，则包含所有消息
+    const endIndex = upToIndex !== undefined ? upToIndex : session.messages.length;
+    
+    console.log(`[上下文] 构建从0到${endIndex}的上下文，共有${session.messages.length}条消息`);
+    
+    for (let i = 0; i < endIndex; i++) {
+      const msg = session.messages[i];
+      if (!msg) continue;
+      if (msg.isError) continue; // 跳过错误消息
+      
+      let content;
+      if (msg.role === 'user') {
+        content = getUserDisplayContent(msg);
+      } else if (msg.role === 'assistant') {
+        content = getAssistantDisplayContent(msg);
+        // 跳过占位符或空内容
+        if (!content || content.trim() === '') continue;
+      } else {
+        content = msg.content || '';
+      }
+      
+      if (content && content.trim() !== '') {
+        contextMessages.push({ role: msg.role, content: content });
+        console.log(`[上下文] 第${i}条消息 (${msg.role}): ${content.substring(0, 50)}...`);
+      }
+    }
+    
+    console.log(`[上下文] 最终构建了${contextMessages.length}条上下文消息`);
+    
+    // 显示上下文指示器
+    const indicator = document.getElementById('contextIndicator');
+    if (indicator) {
+      indicator.textContent = `上下文: ${contextMessages.length}条消息`;
+      indicator.style.display = 'block';
+      setTimeout(() => { indicator.style.display = 'none'; }, 3000);
+    }
+    
+    return contextMessages;
+  }
+
+  // ========== 编辑用户消息 ==========
   function editUserMessage(session, messageIndex, newContent) {
     const msg = session.messages[messageIndex];
     if (!msg || msg.role !== 'user') return false;
     
-    // 初始化versions数组
     if (!msg.versions || msg.versions.length === 0) {
       msg.versions = [{ content: msg.content || '', editedAt: new Date().toISOString() }];
       msg.currentVersionIndex = 0;
     }
     
-    // 添加新版本
     msg.versions.push({ content: newContent.trim(), editedAt: new Date().toISOString() });
     msg.currentVersionIndex = msg.versions.length - 1;
-    msg.content = newContent.trim(); // 保持兼容
+    msg.content = newContent.trim();
     
-    // 找到对应的AI消息，也添加新版本占位（稍后由API填充）
-    const aiMsgIndex = messageIndex + 1;
-    if (aiMsgIndex < session.messages.length && session.messages[aiMsgIndex].role === 'assistant') {
-      const aiMsg = session.messages[aiMsgIndex];
-      if (!aiMsg.versions || aiMsg.versions.length === 0) {
-        aiMsg.versions = [{ content: aiMsg.content || '', timestamp: new Date().toISOString() }];
-      }
-      // 为新用户版本对应的AI版本创建占位
-      aiMsg.versions.push({ content: '', timestamp: new Date().toISOString(), placeholder: true });
-      aiMsg.currentVersionIndex = aiMsg.versions.length - 1;
-      aiMsg.pairedWithUserVersion = msg.currentVersionIndex;
-    }
-    
+    // 删除该用户消息之后的所有消息（因为对话已经改变）
+    const deletedCount = session.messages.length - messageIndex - 1;
+    session.messages = session.messages.slice(0, messageIndex + 1);
     session.updatedAt = new Date().toISOString();
     saveState();
+    
+    console.log(`[编辑] 编辑了第${messageIndex}条消息，删除了${deletedCount}条后续消息`);
     return true;
   }
 
-  // 切换用户消息版本 - 同时切换对应的AI回答版本
+  // 切换用户消息版本
   function switchUserMessageVersion(session, messageIndex, direction) {
     const msg = session.messages[messageIndex];
     if (!msg?.versions || msg.versions.length === 0) return false;
@@ -330,25 +374,23 @@
       const aiMsg = session.messages[aiMsgIndex];
       if (aiMsg.versions && aiMsg.versions.length > currentIdx) {
         aiMsg.currentVersionIndex = currentIdx;
-        aiMsg.pairedWithUserVersion = currentIdx;
       }
     }
     
     saveState();
+    console.log(`[版本切换] 用户消息${messageIndex}切换到版本${currentIdx+1}/${msg.versions.length}`);
     return true;
   }
 
-  // 重新生成AI回答 - 追加新版本
+  // 重新生成AI回答 - 使用完整上下文
   async function regenerateAnswer(session, aiMessageIndex) {
     if (isStreaming) { showToast('请等待当前请求完成'); return; }
     if (aiMessageIndex < 1) return;
     
-    const userMsg = session.messages[aiMessageIndex - 1];
-    if (userMsg.role !== 'user') return;
+    // 构建完整上下文（到该AI消息之前的所有消息）
+    const contextMessages = buildContextMessages(session, aiMessageIndex);
     
-    // 使用当前查看的用户消息版本构建上下文
-    const userContent = getUserDisplayContent(userMsg);
-    const contextMessages = [{ role: 'user', content: userContent }];
+    console.log(`[重新生成] 使用${contextMessages.length}条上下文消息重新生成第${aiMessageIndex}条AI回答`);
     
     isStreaming = true;
     activeMenuMessageId = null;
@@ -358,19 +400,19 @@
       const newContent = await callDeepSeekAPI(contextMessages);
       const aiMsg = session.messages[aiMessageIndex];
       
-      // 初始化versions
       if (!aiMsg.versions || aiMsg.versions.length === 0) {
         aiMsg.versions = [{ content: aiMsg.content || '', timestamp: new Date().toISOString() }];
         aiMsg.currentVersionIndex = 0;
       }
       
-      // 添加新版本
       aiMsg.versions.push({ content: newContent, timestamp: new Date().toISOString() });
       aiMsg.currentVersionIndex = aiMsg.versions.length - 1;
+      aiMsg.content = newContent;
       aiMsg.isError = false;
       
       session.updatedAt = new Date().toISOString();
       saveState();
+      console.log(`[重新生成] 完成，现在有${aiMsg.versions.length}个版本`);
     } catch (e) {
       showToast('重新生成失败: ' + e.message);
     } finally {
@@ -379,7 +421,7 @@
     }
   }
 
-  // 切换AI回答版本（独立于用户消息版本）
+  // 切换AI回答版本
   function switchAssistantVersion(session, aiMessageIndex, direction) {
     const msg = session.messages[aiMessageIndex];
     if (!msg?.versions || msg.versions.length === 0) return false;
@@ -391,13 +433,19 @@
     
     msg.currentVersionIndex = currentIdx;
     saveState();
+    console.log(`[AI版本切换] AI消息${aiMessageIndex}切换到版本${currentIdx+1}/${msg.versions.length}`);
     return true;
   }
 
   // ========== API ==========
   async function callDeepSeekAPI(messages) {
     if (!appState.apiKey) throw new Error('请先设置API Key');
+    if (messages.length === 0) throw new Error('消息列表为空');
+    
     const model = appState.deepThink ? 'deepseek-reasoner' : appState.model;
+    
+    console.log(`[API] 发送请求，模型: ${model}, 消息数: ${messages.length}`);
+    
     const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${appState.apiKey}` },
@@ -411,10 +459,11 @@
       throw new Error(err.error?.message || `API错误 ${res.status}`);
     }
     const data = await res.json();
+    console.log(`[API] 收到回复，长度: ${data.choices[0].message.content.length}`);
     return data.choices[0].message.content;
   }
 
-  // ========== 发送消息 ==========
+  // ========== 发送消息（使用完整上下文）==========
   async function sendMessage() {
     if (isStreaming) { showToast('请等待'); return; }
     const text = document.getElementById('userInput').value.trim();
@@ -445,8 +494,65 @@
     renderChat();
     
     isStreaming = true;
+    
+    // 构建完整上下文（从第一条到刚添加的用户消息）
+    const contextMessages = buildContextMessages(session, session.messages.length);
+    
+    console.log(`[发送消息] 使用${contextMessages.length}条上下文消息，其中包含从第1条到第${session.messages.length}条的全部消息`);
+    
     try {
-      const reply = await callDeepSeekAPI([{ role: 'user', content: fullContent }]);
+      const reply = await callDeepSeekAPI(contextMessages);
+      session.messages.push({
+        role: 'assistant',
+        content: reply,
+        versions: [{ content: reply, timestamp: new Date().toISOString() }],
+        currentVersionIndex: 0,
+        isError: false
+      });
+      session.updatedAt = new Date().toISOString();
+      saveState();
+      console.log(`[发送消息] AI回复完成，会话总消息数: ${session.messages.length}`);
+    } catch (e) {
+      session.messages.push({
+        role: 'assistant', content: e.message,
+        versions: [{ content: e.message, timestamp: new Date().toISOString() }],
+        currentVersionIndex: 0, isError: true
+      });
+      session.updatedAt = new Date().toISOString();
+      saveState();
+      showToast(e.message);
+    } finally {
+      isStreaming = false;
+      renderChat();
+    }
+  }
+
+  // 编辑并重新发送（使用完整上下文）
+  async function editAndResend(session, messageIndex) {
+    const msg = session.messages[messageIndex];
+    if (!msg || msg.role !== 'user') return;
+    const currentDisplay = getUserDisplayContent(msg);
+    const newContent = prompt('编辑消息:', currentDisplay);
+    if (newContent === null || newContent.trim() === '' || newContent.trim() === currentDisplay) return;
+    if (isStreaming) { showToast('请等待'); return; }
+    
+    console.log(`[编辑重发] 编辑第${messageIndex}条消息: "${currentDisplay.substring(0,30)}..." -> "${newContent.substring(0,30)}..."`);
+    
+    // 编辑消息（添加新版本，删除后续对话）
+    editUserMessage(session, messageIndex, newContent.trim());
+    
+    activeMenuMessageId = null;
+    renderChat();
+    
+    isStreaming = true;
+    
+    // 构建完整上下文（从第一条到编辑后的消息）
+    const contextMessages = buildContextMessages(session, session.messages.length);
+    
+    console.log(`[编辑重发] 使用${contextMessages.length}条上下文消息生成新回复`);
+    
+    try {
+      const reply = await callDeepSeekAPI(contextMessages);
       session.messages.push({
         role: 'assistant',
         content: reply,
@@ -464,58 +570,9 @@
       });
       session.updatedAt = new Date().toISOString();
       saveState();
-      showToast(e.message);
     } finally {
       isStreaming = false;
       renderChat();
-    }
-  }
-
-  // 编辑并重新发送
-  async function editAndResend(session, messageIndex) {
-    const msg = session.messages[messageIndex];
-    if (!msg || msg.role !== 'user') return;
-    const currentDisplay = getUserDisplayContent(msg);
-    const newContent = prompt('编辑消息:', currentDisplay);
-    if (newContent === null || newContent.trim() === '' || newContent.trim() === currentDisplay) return;
-    if (isStreaming) { showToast('请等待'); return; }
-    
-    // 编辑消息（添加新版本，不删除旧版本）
-    editUserMessage(session, messageIndex, newContent.trim());
-    const aiMsgIndex = messageIndex + 1;
-    
-    // 如果对应的AI消息存在，用新版本替换占位符
-    if (aiMsgIndex < session.messages.length && session.messages[aiMsgIndex].role === 'assistant') {
-      const aiMsg = session.messages[aiMsgIndex];
-      activeMenuMessageId = null;
-      renderChat();
-      
-      isStreaming = true;
-      try {
-        const reply = await callDeepSeekAPI([{ role: 'user', content: newContent.trim() }]);
-        // 更新最新版本的AI回答
-        const lastVersion = aiMsg.versions[aiMsg.versions.length - 1];
-        if (lastVersion && lastVersion.placeholder) {
-          lastVersion.content = reply;
-          lastVersion.placeholder = false;
-          lastVersion.timestamp = new Date().toISOString();
-        }
-        aiMsg.isError = false;
-        session.updatedAt = new Date().toISOString();
-        saveState();
-      } catch (e) {
-        const lastVersion = aiMsg.versions[aiMsg.versions.length - 1];
-        if (lastVersion && lastVersion.placeholder) {
-          lastVersion.content = e.message;
-          lastVersion.placeholder = false;
-        }
-        aiMsg.isError = true;
-        session.updatedAt = new Date().toISOString();
-        saveState();
-      } finally {
-        isStreaming = false;
-        renderChat();
-      }
     }
   }
 
@@ -706,15 +763,8 @@
             migrated = true;
           }
         }
-        // 清理旧字段
-        delete msg._hasEdits;
-        delete msg.editHistory;
-        delete msg._originalContent;
-        delete msg._currentVersionIndex_old;
-        delete msg._isRegenerated;
-        delete msg.regeneratedVersions;
-        delete msg._regeneratedAt;
-        delete msg._currentRegeneratedIndex;
+        delete msg._hasEdits; delete msg.editHistory; delete msg._originalContent;
+        delete msg._isRegenerated; delete msg.regeneratedVersions; delete msg._regeneratedAt; delete msg._currentRegeneratedIndex;
       });
     });
     if (migrated) { console.log('[迁移] 数据已升级'); saveState(); }
@@ -729,6 +779,8 @@
     document.getElementById('bgTypeSelect').value = appState.bgType;
     document.getElementById('bgValueInput').value = appState.bgValue || '';
     renderSessionList(); renderChat(); applyBackground();
+    
+    console.log('[初始化] 应用就绪，数据库:', DB_NAME);
   })();
 })();
 </script>
