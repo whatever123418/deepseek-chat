@@ -76,293 +76,92 @@
       cursor: pointer;
       padding: 5px;
     }
-    .search-session {
-      margin: 10px;
-      padding: 10px 12px;
-      background: #1e1e1e;
-      border: 1px solid #333;
-      border-radius: 8px;
-      color: #fff;
-      font-size: 0.9rem;
-      outline: none;
-    }
+    .search-session { margin: 10px; padding: 10px 12px; background: #1e1e1e; border: 1px solid #333; border-radius: 8px; color: #fff; font-size: 0.9rem; outline: none; }
     .session-list { flex: 1; overflow-y: auto; padding: 8px; }
     .session-item {
-      padding: 12px;
-      margin-bottom: 4px;
-      border-radius: 8px;
-      background: #1a1a1a;
-      color: #ddd;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background 0.15s;
-      border: 1px solid transparent;
+      padding: 12px; margin-bottom: 4px; border-radius: 8px; background: #1a1a1a; color: #ddd; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center; transition: background 0.15s; border: 1px solid transparent;
     }
     .session-item.active { border-color: #4f8cff; background: #1e2a3a; }
     .session-info { flex: 1; overflow: hidden; }
-    .session-title {
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .session-title { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .session-meta { font-size: 0.7rem; color: #888; margin-top: 4px; }
-    .new-chat-btn {
-      margin: 10px;
-      padding: 12px;
-      background: #2a2a2a;
-      color: #fff;
-      border: 1px solid #444;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-    }
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      background: #0a0a0a;
-      position: relative;
-    }
-    .chat-header {
-      padding: 12px 16px;
-      background: #111;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #222;
-      color: #eee;
-    }
-    .menu-btn {
-      background: none;
-      border: none;
-      color: #ccc;
-      font-size: 1.5rem;
-      margin-right: 12px;
-      cursor: pointer;
-    }
+    .new-chat-btn { margin: 10px; padding: 12px; background: #2a2a2a; color: #fff; border: 1px solid #444; border-radius: 8px; font-weight: 500; cursor: pointer; }
+    .main { flex: 1; display: flex; flex-direction: column; height: 100%; background: #0a0a0a; position: relative; }
+    .chat-header { padding: 12px 16px; background: #111; display: flex; align-items: center; border-bottom: 1px solid #222; color: #eee; }
+    .menu-btn { background: none; border: none; color: #ccc; font-size: 1.5rem; margin-right: 12px; cursor: pointer; }
     .chat-title { flex: 1; font-weight: 500; font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .settings-btn { background: none; border: none; color: #ccc; font-size: 1.3rem; cursor: pointer; }
-    .messages-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .message-row {
-      display: flex;
-      flex-direction: column;
-      animation: slideIn 0.2s ease;
-      position: relative;
-    }
+    .messages-container { flex: 1; overflow-y: auto; padding: 16px 12px; display: flex; flex-direction: column; gap: 8px; }
+    .message-row { display: flex; flex-direction: column; animation: slideIn 0.2s ease; position: relative; }
     .message-row.user { align-items: flex-end; }
     .message-row.assistant { align-items: flex-start; }
-    .message-wrapper {
-      max-width: 90%;
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
-    }
+    .message-wrapper { max-width: 90%; display: flex; align-items: flex-start; gap: 6px; }
     .avatar { font-size: 1.5rem; width: 32px; text-align: center; flex-shrink: 0; }
     .bubble {
-      background: #1e1e1e;
-      color: #f0f0f0;
-      padding: 10px 14px;
-      border-radius: 16px;
-      word-break: break-word;
-      white-space: pre-wrap;
-      position: relative;
-      cursor: pointer;
-      transition: opacity 0.15s;
+      background: #1e1e1e; color: #f0f0f0; padding: 10px 14px; border-radius: 16px;
+      word-break: break-word; white-space: pre-wrap; position: relative; cursor: pointer; transition: opacity 0.15s;
     }
     .bubble:active { opacity: 0.85; }
     .user .bubble { background: #1f3a5f; }
-    
-    .message-actions {
-      display: none;
-      gap: 4px;
-      margin-top: 4px;
-      font-size: 0.7rem;
-      flex-wrap: wrap;
-      align-items: center;
-      animation: fadeIn 0.15s ease;
-    }
-    .message-actions.visible {
-      display: flex;
-    }
+    .message-actions { display: none; gap: 4px; margin-top: 4px; font-size: 0.7rem; flex-wrap: wrap; align-items: center; animation: fadeIn 0.15s ease; }
+    .message-actions.visible { display: flex; }
     .action-btn {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: #ccc;
-      padding: 2px 8px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 0.7rem;
-      white-space: nowrap;
-      transition: background 0.15s;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #ccc;
+      padding: 2px 8px; border-radius: 10px; cursor: pointer; font-size: 0.7rem; white-space: nowrap; transition: background 0.15s;
     }
     .action-btn:active { background: rgba(255,255,255,0.3); }
     .action-btn:disabled { opacity: 0.4; cursor: default; }
-    
-    .regenerated-block {
-      border-left: 3px solid #4f8cff;
-      padding-left: 8px;
-      background: #1a1e26;
-      border-radius: 6px;
-    }
-    .version-controls {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
+    .regenerated-block { border-left: 3px solid #4f8cff; padding-left: 8px; background: #1a1e26; border-radius: 6px; }
+    .version-controls { display: inline-flex; align-items: center; gap: 4px; }
     .version-btn {
-      background: #2a2a2a;
-      border: none;
-      color: #ddd;
-      padding: 2px 6px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.7rem;
-      min-width: 24px;
-      text-align: center;
-      transition: background 0.15s;
+      background: #2a2a2a; border: none; color: #ddd; padding: 2px 6px; border-radius: 4px;
+      cursor: pointer; font-size: 0.7rem; min-width: 24px; text-align: center; transition: background 0.15s;
     }
     .version-btn:active { background: #3a3a3a; }
     .version-btn:disabled { opacity: 0.35; cursor: default; background: #1a1a1a; }
     .version-info { color: #8ab4f8; font-size: 0.7rem; min-width: 40px; text-align: center; }
     .editing-indicator { color: #ffa500; font-size: 0.65rem; margin-left: 4px; }
-    
     .file-preview {
-      background: #1e1e1e;
-      padding: 8px 12px;
-      margin: 0 12px 4px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #ccc;
-      font-size: 0.8rem;
-      border: 1px solid #333;
+      background: #1e1e1e; padding: 8px 12px; margin: 0 12px 4px; border-radius: 8px;
+      display: flex; align-items: center; gap: 8px; color: #ccc; font-size: 0.8rem; border: 1px solid #333;
     }
     .remove-file-btn { background: none; border: none; color: #ff6b6b; cursor: pointer; font-size: 1rem; }
-    
-    .input-area {
-      padding: 10px 12px;
-      background: #111;
-      border-top: 1px solid #222;
-      display: flex;
-      align-items: flex-end;
-      gap: 8px;
-    }
+    .input-area { padding: 10px 12px; background: #111; border-top: 1px solid #222; display: flex; align-items: flex-end; gap: 8px; }
     textarea {
-      flex: 1;
-      background: #1e1e1e;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 10px 14px;
-      color: #fff;
-      resize: none;
-      max-height: 150px;
-      font-size: 0.95rem;
-      outline: none;
-      line-height: 1.4;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      overflow-y: auto;
+      flex: 1; background: #1e1e1e; border: 1px solid #333; border-radius: 12px; padding: 10px 14px;
+      color: #fff; resize: none; max-height: 150px; font-size: 0.95rem; outline: none; line-height: 1.4;
+      scrollbar-width: none; -ms-overflow-style: none; overflow-y: auto;
     }
-    textarea::-webkit-scrollbar {
-      display: none;
-      width: 0;
-      height: 0;
-    }
-    
-    .send-btn {
-      background: #2a4a7f;
-      border: none;
-      color: white;
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    .attach-btn {
-      background: #2a2a2a;
-      border: 1px solid #444;
-      color: white;
-      padding: 10px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
+    textarea::-webkit-scrollbar { display: none; width: 0; height: 0; }
+    .send-btn { background: #2a4a7f; border: none; color: white; padding: 10px 14px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 0.9rem; }
+    .attach-btn { background: #2a2a2a; border: 1px solid #444; color: white; padding: 10px; border-radius: 12px; cursor: pointer; font-size: 1rem; }
     .toast {
-      position: fixed;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #333;
-      color: white;
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      z-index: 200;
-      opacity: 0.9;
-      pointer-events: none;
+      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+      background: #333; color: white; padding: 8px 20px; border-radius: 20px; font-size: 0.9rem; z-index: 200; opacity: 0.9; pointer-events: none;
     }
     .settings-panel {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #121212;
-      z-index: 110;
-      padding: 20px;
-      border-radius: 20px 20px 0 0;
-      color: #eee;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-      display: none;
+      position: fixed; bottom: 0; left: 0; width: 100%; background: #121212; z-index: 110;
+      padding: 20px; border-radius: 20px 20px 0 0; color: #eee; max-height: 80vh; overflow-y: auto;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.5); display: none;
     }
     .settings-panel.active { display: block; }
     .setting-row { margin-bottom: 16px; }
     .setting-row label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 4px; }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      background: #1e1e1e;
-      border: 1px solid #333;
-      border-radius: 8px;
-      color: #fff;
-    }
-    
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+    input, select { width: 100%; padding: 10px; background: #1e1e1e; border: 1px solid #333; border-radius: 8px; color: #fff; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
 <body>
 <div id="app">
   <div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <h3>会话列表</h3>
-      <button class="close-sidebar-btn" id="closeSidebarBtn">✕</button>
-    </div>
+    <div class="sidebar-header"><h3>会话列表</h3><button class="close-sidebar-btn" id="closeSidebarBtn">✕</button></div>
     <input type="text" class="search-session" id="searchSessionInput" placeholder="搜索会话...">
     <div class="session-list" id="sessionList"></div>
     <button class="new-chat-btn" id="newChatBtn">+ 新建会话</button>
   </div>
   <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-  
   <div class="main">
     <div class="chat-header">
       <button class="menu-btn" id="menuBtn">☰</button>
@@ -378,7 +177,6 @@
       <button class="send-btn" id="sendBtn">发送</button>
     </div>
   </div>
-  
   <div class="settings-panel" id="settingsPanel">
     <h4 style="margin-bottom:16px;">设置</h4>
     <div class="setting-row"><label>API Key</label><input type="password" id="apiKeyInput" placeholder="sk-..."></div>
@@ -389,1202 +187,550 @@
     <div class="setting-row"><label>AI头像(emoji)</label><input id="aiAvatarInput" value="🤖"></div>
     <div class="setting-row"><label>背景类型</label><select id="bgTypeSelect"><option value="color">纯色</option><option value="gradient">渐变</option><option value="image">图片URL</option></select></div>
     <div class="setting-row"><input id="bgValueInput" placeholder="#0a0a0a 或渐变 或图片URL"></div>
-    <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
-      <button id="exportBtn" class="action-btn" style="padding:8px 16px; display:inline-block;">📤 导出</button>
-      <button id="importBtn" class="action-btn" style="padding:8px 16px; display:inline-block;">📥 导入</button>
-    </div>
+    <div style="display:flex; gap:8px; margin-top:12px;"><button id="exportBtn" class="action-btn" style="padding:8px 16px;">📤 导出</button><button id="importBtn" class="action-btn" style="padding:8px 16px;">📥 导入</button></div>
     <button id="closeSettingsBtn" style="margin-top:16px; width:100%; padding:10px; background:#333; border:none; color:white; border-radius:8px;">关闭</button>
   </div>
 </div>
 
 <script>
-  (function() {
-    // ========== 数据库配置 ==========
-    const DB_NAME = 'DeepSeekChatDB_V2';
-    const DB_VERSION = 2; // 升级版本号以确保数据库结构更新
-    
-    let db = null;
-    let dbReady = false;
-    
-    const appState = {
-      apiKey: '',
-      model: 'deepseek-chat',
-      temperature: 0.7,
-      deepThink: false,
-      bgType: 'color',
-      bgValue: '#0a0a0a',
-      userAvatar: '😀',
-      assistantAvatar: '🤖',
-      activeSessionId: null,
-      sessions: {},
-      sessionOrder: []
-    };
-    
-    let currentFile = null;
-    let isStreaming = false;
-    let activeMenuMessageId = null;
+(function() {
+  const DB_NAME = 'DeepSeekChatDB_V3';
+  let db;
+  const appState = {
+    apiKey: '', model: 'deepseek-chat', temperature: 0.7, deepThink: false,
+    bgType: 'color', bgValue: '#0a0a0a', userAvatar: '😀', assistantAvatar: '🤖',
+    activeSessionId: null, sessions: {}, sessionOrder: []
+  };
+  let currentFile = null, isStreaming = false, activeMenuMessageId = null;
 
-    // ========== 增强的数据库操作 ==========
-    
-    // 打开数据库（带重试机制）
-    function openDB() {
-      return new Promise((resolve, reject) => {
-        console.log('[DB] 正在打开数据库...');
-        
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
-        
-        request.onupgradeneeded = (e) => {
-          console.log('[DB] 数据库升级中...');
-          const db = e.target.result;
-          
-          // 如果旧对象存储存在，删除它（确保干净的升级）
-          if (db.objectStoreNames.contains('state')) {
-            db.deleteObjectStore('state');
-          }
-          
-          // 创建新的对象存储
-          const store = db.createObjectStore('state', { keyPath: 'key' });
-          console.log('[DB] 对象存储创建成功');
-        };
-        
-        request.onsuccess = (e) => {
-          db = e.target.result;
-          dbReady = true;
-          console.log('[DB] 数据库打开成功');
-          
-          // 监听数据库连接关闭
-          db.onclose = () => {
-            console.warn('[DB] 数据库连接意外关闭！');
-            dbReady = false;
-          };
-          
-          // 监听版本变更
-          db.onversionchange = () => {
-            console.warn('[DB] 数据库版本变更，关闭连接');
-            db.close();
-            dbReady = false;
-          };
-          
-          resolve(db);
-        };
-        
-        request.onerror = (e) => {
-          console.error('[DB] 数据库打开失败:', e.target.error);
-          reject(e.target.error);
-        };
-        
-        // 数据库被阻塞
-        request.onblocked = () => {
-          console.warn('[DB] 数据库被阻塞！请关闭其他标签页');
-          reject(new Error('数据库被阻塞'));
-        };
-      });
-    }
-    
-    // 保存状态（带验证和重试）
-    async function saveState(retryCount = 0) {
-      const maxRetries = 3;
-      
-      try {
-        // 确保数据库连接有效
-        if (!db || !dbReady) {
-          console.log('[DB] 重新连接数据库...');
-          await openDB();
-        }
-        
-        // 深拷贝数据以避免引用问题
-        const dataToSave = JSON.parse(JSON.stringify(appState));
-        
-        return new Promise((resolve, reject) => {
-          try {
-            const tx = db.transaction('state', 'readwrite');
-            const store = tx.objectStore('state');
-            
-            // 使用 put 而不是 add，确保可以覆盖
-            const putRequest = store.put({ key: 'appState', value: dataToSave });
-            
-            putRequest.onsuccess = () => {
-              console.log('[DB] 数据保存成功');
-            };
-            
-            putRequest.onerror = (e) => {
-              console.error('[DB] put操作失败:', e.target.error);
-              reject(e.target.error);
-            };
-            
-            tx.oncomplete = () => {
-              console.log('[DB] 事务完成，数据已持久化');
-              resolve();
-            };
-            
-            tx.onerror = (e) => {
-              console.error('[DB] 事务失败:', e.target.error);
-              reject(e.target.error);
-            };
-            
-            tx.onabort = () => {
-              console.warn('[DB] 事务被中止');
-              reject(new Error('事务被中止'));
-            };
-          } catch (txError) {
-            console.error('[DB] 创建事务失败:', txError);
-            reject(txError);
-          }
-        });
-        
-      } catch (error) {
-        console.error(`[DB] 保存失败 (第${retryCount + 1}次):`, error);
-        
-        if (retryCount < maxRetries) {
-          console.log(`[DB] 将在500ms后重试...`);
-          await new Promise(r => setTimeout(r, 500));
-          return saveState(retryCount + 1);
-        } else {
-          // 最终失败时，尝试使用localStorage作为备份
-          try {
-            const backupData = JSON.stringify(appState);
-            localStorage.setItem('deepseek_backup', backupData);
-            console.log('[DB] 已保存到localStorage备份');
-          } catch (lsError) {
-            console.error('[DB] localStorage备份也失败:', lsError);
-          }
-          throw error;
-        }
-      }
-    }
-    
-    // 加载状态（带备份恢复）
-    async function loadState() {
-      try {
-        if (!db || !dbReady) {
-          await openDB();
-        }
-        
-        return new Promise((resolve) => {
-          try {
-            const tx = db.transaction('state', 'readonly');
-            const store = tx.objectStore('state');
-            const getRequest = store.get('appState');
-            
-            getRequest.onsuccess = () => {
-              if (getRequest.result && getRequest.result.value) {
-                console.log('[DB] 数据加载成功');
-                
-                // 深拷贝以避免引用问题
-                const loadedData = JSON.parse(JSON.stringify(getRequest.result.value));
-                
-                // 合并到appState
-                Object.keys(loadedData).forEach(key => {
-                  if (loadedData[key] !== undefined) {
-                    appState[key] = loadedData[key];
-                  }
-                });
-                
-                console.log('[DB] 已加载会话数:', Object.keys(appState.sessions).length);
-              } else {
-                console.log('[DB] 没有找到保存的数据');
-                
-                // 尝试从localStorage恢复
-                tryLoadFromLocalStorage();
-              }
-              resolve();
-            };
-            
-            getRequest.onerror = () => {
-              console.warn('[DB] 读取数据失败，尝试localStorage恢复');
-              tryLoadFromLocalStorage();
-              resolve();
-            };
-            
-            tx.oncomplete = () => {
-              console.log('[DB] 读取事务完成');
-            };
-            
-            tx.onerror = () => {
-              console.warn('[DB] 读取事务失败，尝试localStorage恢复');
-              tryLoadFromLocalStorage();
-              resolve();
-            };
-          } catch (error) {
-            console.warn('[DB] 创建读取事务失败:', error);
-            tryLoadFromLocalStorage();
-            resolve();
-          }
-        });
-        
-      } catch (error) {
-        console.warn('[DB] 数据库连接失败，尝试localStorage恢复:', error);
-        tryLoadFromLocalStorage();
-      }
-    }
-    
-    // 从localStorage恢复数据
-    function tryLoadFromLocalStorage() {
-      try {
-        const backupData = localStorage.getItem('deepseek_backup');
-        if (backupData) {
-          const parsed = JSON.parse(backupData);
-          if (parsed.sessions && Object.keys(parsed.sessions).length > 0) {
-            console.log('[备份] 从localStorage恢复数据，会话数:', Object.keys(parsed.sessions).length);
-            Object.keys(parsed).forEach(key => {
-              if (parsed[key] !== undefined) {
-                appState[key] = parsed[key];
-              }
-            });
-          }
-        }
-      } catch (e) {
-        console.warn('[备份] localStorage恢复失败:', e);
-      }
-    }
-    
-    // 定期备份到localStorage
-    function backupToLocalStorage() {
-      try {
-        const dataToBackup = JSON.stringify(appState);
-        localStorage.setItem('deepseek_backup', dataToBackup);
-        console.log('[备份] localStorage备份完成');
-      } catch (e) {
-        console.warn('[备份] localStorage备份失败（可能超出5MB限制）:', e);
-      }
-    }
+  // ========== IndexedDB ==========
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const r = indexedDB.open(DB_NAME, 1);
+      r.onupgradeneeded = (e) => { if (!e.target.result.objectStoreNames.contains('state')) e.target.result.createObjectStore('state', { keyPath: 'key' }); };
+      r.onsuccess = (e) => { db = e.target.result; resolve(db); };
+      r.onerror = reject;
+    });
+  }
+  async function saveState() {
+    if (!db) await openDB();
+    return new Promise((resolve) => {
+      const tx = db.transaction('state', 'readwrite');
+      tx.objectStore('state').put({ key: 'appState', value: JSON.parse(JSON.stringify(appState)) });
+      tx.oncomplete = resolve;
+    });
+  }
+  async function loadState() {
+    if (!db) await openDB();
+    return new Promise((resolve) => {
+      const tx = db.transaction('state', 'readonly');
+      const req = tx.objectStore('state').get('appState');
+      req.onsuccess = () => { if (req.result?.value) Object.assign(appState, req.result.value); resolve(); };
+      req.onerror = () => resolve();
+    });
+  }
 
-    // ========== 工具函数 ==========
-    function generateId() { 
-      return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); 
-    }
-    
-    function formatTime(iso) {
-      if (!iso) return '';
-      try {
-        const d = new Date(iso);
-        if (isNaN(d.getTime())) return '';
-        return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-      } catch (e) {
-        return '';
-      }
-    }
-    
-    function showToast(msg) {
-      const existingToast = document.querySelector('.toast');
-      if (existingToast) existingToast.remove();
-      
-      const t = document.createElement('div'); 
-      t.className = 'toast'; 
-      t.textContent = msg;
-      document.body.appendChild(t);
-      setTimeout(() => t.remove(), 2500);
-    }
-    
-    function getActiveSession() {
-      if (!appState.activeSessionId || !appState.sessions[appState.activeSessionId]) {
-        // 修复：如果有会话但不活跃，自动选择第一个
-        if (appState.sessionOrder && appState.sessionOrder.length > 0) {
-          const firstValidId = appState.sessionOrder.find(id => appState.sessions[id]);
-          if (firstValidId) {
-            appState.activeSessionId = firstValidId;
-            return appState.sessions[firstValidId];
-          }
-        }
-        return null;
-      }
-      return appState.sessions[appState.activeSessionId];
-    }
-    
-    function msgId(sessionId, msgIndex) { 
-      return `${sessionId}_${msgIndex}`; 
-    }
+  // ========== 工具 ==========
+  function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
+  function formatTime(iso) { if(!iso)return''; const d=new Date(iso); return d.toLocaleDateString()+' '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
+  function showToast(msg) { const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
+  function getActiveSession() {
+    if(!appState.activeSessionId||!appState.sessions[appState.activeSessionId]) appState.activeSessionId=appState.sessionOrder[0]||null;
+    return appState.activeSessionId?appState.sessions[appState.activeSessionId]:null;
+  }
+  function msgId(sid,idx){return `${sid}_${idx}`;}
 
-    // ========== 会话管理 ==========
-    function createSession(title = '新对话') {
-      const id = generateId();
-      const session = { 
-        id, 
-        title, 
-        messages: [], 
-        createdAt: new Date().toISOString(), 
-        updatedAt: new Date().toISOString() 
-      };
-      appState.sessions[id] = session;
-      appState.sessionOrder.unshift(id);
-      appState.activeSessionId = id;
-      saveState().then(() => backupToLocalStorage());
-      return session;
+  // ========== 会话管理 ==========
+  function createSession(title='新对话'){
+    const id=generateId();
+    const s={id,title,messages:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+    appState.sessions[id]=s; appState.sessionOrder.unshift(id); appState.activeSessionId=id; saveState(); return s;
+  }
+  function deleteSession(id){
+    delete appState.sessions[id]; appState.sessionOrder=appState.sessionOrder.filter(i=>i!==id);
+    if(appState.activeSessionId===id) appState.activeSessionId=appState.sessionOrder[0]||null;
+    if(!appState.activeSessionId) createSession();
+    saveState(); renderSessionList(); renderChat();
+  }
+  function renameSession(id,title){ if(appState.sessions[id]&&title.trim()){appState.sessions[id].title=title.trim();saveState();renderSessionList();renderChat();} }
+
+  // ========== 核心数据结构 ==========
+  // 用户消息: { role:'user', content:'最新版本', versions:[{content:v1},{content:v2},...], currentVersionIndex:1 }
+  // AI消息:   { role:'assistant', versions:[{content:v1},{content:v2},...], currentVersionIndex:1, pairedWithUserVersion:1 }
+  // pairedWithUserVersion: 当用户消息切换到版本X时，AI回答自动切换到对应的版本
+
+  function getUserDisplayContent(msg) {
+    if(!msg.versions||msg.versions.length===0) return msg.content||'';
+    const idx=msg.currentVersionIndex??(msg.versions.length-1);
+    return (idx>=0&&idx<msg.versions.length)?msg.versions[idx].content:(msg.content||'');
+  }
+  function getAssistantDisplayContent(msg) {
+    if(!msg.versions||msg.versions.length===0) return msg.content||'';
+    const idx=msg.currentVersionIndex??(msg.versions.length-1);
+    return (idx>=0&&idx<msg.versions.length)?msg.versions[idx].content:(msg.content||'');
+  }
+  function getUserCurrentVersionIndex(msg) {
+    if(!msg.versions||msg.versions.length===0) return 0;
+    return msg.currentVersionIndex??(msg.versions.length-1);
+  }
+  function getAssistantCurrentVersionIndex(msg) {
+    if(!msg.versions||msg.versions.length===0) return 0;
+    return msg.currentVersionIndex??(msg.versions.length-1);
+  }
+
+  // ========== 编辑用户消息（保留所有版本）==========
+  function editUserMessage(session, messageIndex, newContent) {
+    const msg = session.messages[messageIndex];
+    if (!msg || msg.role !== 'user') return false;
+    
+    // 初始化versions数组
+    if (!msg.versions || msg.versions.length === 0) {
+      msg.versions = [{ content: msg.content || '', editedAt: new Date().toISOString() }];
+      msg.currentVersionIndex = 0;
     }
     
-    function deleteSession(id) {
-      if (!appState.sessions[id]) return;
-      delete appState.sessions[id];
-      appState.sessionOrder = appState.sessionOrder.filter(i => i !== id);
+    // 添加新版本
+    msg.versions.push({ content: newContent.trim(), editedAt: new Date().toISOString() });
+    msg.currentVersionIndex = msg.versions.length - 1;
+    msg.content = newContent.trim(); // 保持兼容
+    
+    // 找到对应的AI消息，也添加新版本占位（稍后由API填充）
+    const aiMsgIndex = messageIndex + 1;
+    if (aiMsgIndex < session.messages.length && session.messages[aiMsgIndex].role === 'assistant') {
+      const aiMsg = session.messages[aiMsgIndex];
+      if (!aiMsg.versions || aiMsg.versions.length === 0) {
+        aiMsg.versions = [{ content: aiMsg.content || '', timestamp: new Date().toISOString() }];
+      }
+      // 为新用户版本对应的AI版本创建占位
+      aiMsg.versions.push({ content: '', timestamp: new Date().toISOString(), placeholder: true });
+      aiMsg.currentVersionIndex = aiMsg.versions.length - 1;
+      aiMsg.pairedWithUserVersion = msg.currentVersionIndex;
+    }
+    
+    session.updatedAt = new Date().toISOString();
+    saveState();
+    return true;
+  }
+
+  // 切换用户消息版本 - 同时切换对应的AI回答版本
+  function switchUserMessageVersion(session, messageIndex, direction) {
+    const msg = session.messages[messageIndex];
+    if (!msg?.versions || msg.versions.length === 0) return false;
+    
+    let currentIdx = msg.currentVersionIndex ?? (msg.versions.length - 1);
+    if (direction === 'prev' && currentIdx > 0) currentIdx--;
+    else if (direction === 'next' && currentIdx < msg.versions.length - 1) currentIdx++;
+    else return false;
+    
+    msg.currentVersionIndex = currentIdx;
+    
+    // 同步切换对应的AI回答版本
+    const aiMsgIndex = messageIndex + 1;
+    if (aiMsgIndex < session.messages.length && session.messages[aiMsgIndex].role === 'assistant') {
+      const aiMsg = session.messages[aiMsgIndex];
+      if (aiMsg.versions && aiMsg.versions.length > currentIdx) {
+        aiMsg.currentVersionIndex = currentIdx;
+        aiMsg.pairedWithUserVersion = currentIdx;
+      }
+    }
+    
+    saveState();
+    return true;
+  }
+
+  // 重新生成AI回答 - 追加新版本
+  async function regenerateAnswer(session, aiMessageIndex) {
+    if (isStreaming) { showToast('请等待当前请求完成'); return; }
+    if (aiMessageIndex < 1) return;
+    
+    const userMsg = session.messages[aiMessageIndex - 1];
+    if (userMsg.role !== 'user') return;
+    
+    // 使用当前查看的用户消息版本构建上下文
+    const userContent = getUserDisplayContent(userMsg);
+    const contextMessages = [{ role: 'user', content: userContent }];
+    
+    isStreaming = true;
+    activeMenuMessageId = null;
+    renderChat();
+    
+    try {
+      const newContent = await callDeepSeekAPI(contextMessages);
+      const aiMsg = session.messages[aiMessageIndex];
       
-      if (appState.activeSessionId === id) {
-        appState.activeSessionId = appState.sessionOrder[0] || null;
+      // 初始化versions
+      if (!aiMsg.versions || aiMsg.versions.length === 0) {
+        aiMsg.versions = [{ content: aiMsg.content || '', timestamp: new Date().toISOString() }];
+        aiMsg.currentVersionIndex = 0;
       }
       
-      if (!appState.activeSessionId) {
-        createSession('新对话');
-      }
+      // 添加新版本
+      aiMsg.versions.push({ content: newContent, timestamp: new Date().toISOString() });
+      aiMsg.currentVersionIndex = aiMsg.versions.length - 1;
+      aiMsg.isError = false;
       
-      saveState().then(() => backupToLocalStorage());
-      renderSessionList(); 
+      session.updatedAt = new Date().toISOString();
+      saveState();
+    } catch (e) {
+      showToast('重新生成失败: ' + e.message);
+    } finally {
+      isStreaming = false;
       renderChat();
     }
+  }
+
+  // 切换AI回答版本（独立于用户消息版本）
+  function switchAssistantVersion(session, aiMessageIndex, direction) {
+    const msg = session.messages[aiMessageIndex];
+    if (!msg?.versions || msg.versions.length === 0) return false;
     
-    function renameSession(id, title) {
-      if (appState.sessions[id] && title.trim()) {
-        appState.sessions[id].title = title.trim();
-        saveState().then(() => backupToLocalStorage());
-        renderSessionList(); 
-        renderChat();
-      }
-    }
+    let currentIdx = msg.currentVersionIndex ?? (msg.versions.length - 1);
+    if (direction === 'prev' && currentIdx > 0) currentIdx--;
+    else if (direction === 'next' && currentIdx < msg.versions.length - 1) currentIdx++;
+    else return false;
+    
+    msg.currentVersionIndex = currentIdx;
+    saveState();
+    return true;
+  }
 
-    // ========== 消息核心操作 ==========
-    function getUserMessageDisplayContent(msg) {
-      if (!msg || !msg._hasEdits || !msg.editHistory || msg.editHistory.length === 0) {
-        return msg?.content || '';
-      }
-      const idx = msg._currentVersionIndex ?? msg.editHistory.length;
-      return idx >= msg.editHistory.length ? msg.content : msg.editHistory[idx].oldContent;
+  // ========== API ==========
+  async function callDeepSeekAPI(messages) {
+    if (!appState.apiKey) throw new Error('请先设置API Key');
+    const model = appState.deepThink ? 'deepseek-reasoner' : appState.model;
+    const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${appState.apiKey}` },
+      body: JSON.stringify({ model, messages, temperature: appState.temperature, max_tokens: appState.deepThink ? 4000 : 2000, stream: false })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      if (res.status === 401) throw new Error('API Key 无效');
+      if (res.status === 402) throw new Error('余额不足');
+      if (res.status === 429) throw new Error('请求太频繁');
+      throw new Error(err.error?.message || `API错误 ${res.status}`);
     }
+    const data = await res.json();
+    return data.choices[0].message.content;
+  }
 
-    function editUserMessage(session, messageIndex, newContent) {
-      const msg = session.messages[messageIndex];
-      if (!msg || msg.role !== 'user') return false;
-      
-      if (!msg._hasEdits) {
-        msg._hasEdits = true;
-        msg.editHistory = [];
-        msg._originalContent = msg.content;
-      }
-      
-      msg.editHistory.push({ 
-        oldContent: msg.content, 
-        editedAt: new Date().toISOString() 
+  // ========== 发送消息 ==========
+  async function sendMessage() {
+    if (isStreaming) { showToast('请等待'); return; }
+    const text = document.getElementById('userInput').value.trim();
+    if (!text && !currentFile) return;
+    
+    let session = getActiveSession();
+    if (!session) session = createSession();
+    
+    let fullContent = text;
+    if (currentFile) fullContent = `[文件: ${currentFile.name}]\n${currentFile.content}\n\n${text || '请分析'}`;
+    
+    const userMsg = {
+      role: 'user',
+      content: fullContent,
+      versions: [{ content: fullContent, editedAt: new Date().toISOString() }],
+      currentVersionIndex: 0,
+      isError: false
+    };
+    session.messages.push(userMsg);
+    session.updatedAt = new Date().toISOString();
+    if (session.messages.filter(m => m.role === 'user').length === 1) session.title = fullContent.substring(0, 30) || '新对话';
+    saveState();
+    
+    document.getElementById('userInput').value = '';
+    document.getElementById('userInput').style.height = 'auto';
+    clearFile();
+    activeMenuMessageId = null;
+    renderChat();
+    
+    isStreaming = true;
+    try {
+      const reply = await callDeepSeekAPI([{ role: 'user', content: fullContent }]);
+      session.messages.push({
+        role: 'assistant',
+        content: reply,
+        versions: [{ content: reply, timestamp: new Date().toISOString() }],
+        currentVersionIndex: 0,
+        isError: false
       });
-      
-      msg.content = newContent.trim();
-      msg._currentVersionIndex = msg.editHistory.length;
-      
-      // 删除后续消息
-      session.messages = session.messages.slice(0, messageIndex + 1);
       session.updatedAt = new Date().toISOString();
-      
-      saveState().then(() => backupToLocalStorage());
-      return true;
+      saveState();
+    } catch (e) {
+      session.messages.push({
+        role: 'assistant', content: e.message,
+        versions: [{ content: e.message, timestamp: new Date().toISOString() }],
+        currentVersionIndex: 0, isError: true
+      });
+      session.updatedAt = new Date().toISOString();
+      saveState();
+      showToast(e.message);
+    } finally {
+      isStreaming = false;
+      renderChat();
     }
+  }
 
-    function switchUserMessageVersion(session, messageIndex, direction) {
-      const msg = session.messages[messageIndex];
-      if (!msg || !msg._hasEdits || !msg.editHistory) return false;
-      
-      const maxVersion = msg.editHistory.length;
-      let currentIdx = msg._currentVersionIndex ?? maxVersion;
-      
-      if (direction === 'prev' && currentIdx > 0) currentIdx--;
-      else if (direction === 'next' && currentIdx < maxVersion) currentIdx++;
-      else return false;
-      
-      msg._currentVersionIndex = currentIdx;
-      saveState().then(() => backupToLocalStorage());
-      return true;
-    }
-
-    async function regenerateAnswer(session, aiMessageIndex) {
-      if (isStreaming) { 
-        showToast('请等待当前请求完成'); 
-        return; 
-      }
-      if (aiMessageIndex < 1) return;
-      
-      const userMsg = session.messages[aiMessageIndex - 1];
-      if (userMsg.role !== 'user') return;
-      
-      // 构建上下文
-      const contextMessages = [];
-      for (let i = 0; i < aiMessageIndex; i++) {
-        const m = session.messages[i];
-        if (!m.isError) {
-          contextMessages.push({ 
-            role: m.role, 
-            content: (m.role === 'user' && m._hasEdits) ? m.content : m.content 
-          });
-        }
-      }
-      
-      isStreaming = true;
+  // 编辑并重新发送
+  async function editAndResend(session, messageIndex) {
+    const msg = session.messages[messageIndex];
+    if (!msg || msg.role !== 'user') return;
+    const currentDisplay = getUserDisplayContent(msg);
+    const newContent = prompt('编辑消息:', currentDisplay);
+    if (newContent === null || newContent.trim() === '' || newContent.trim() === currentDisplay) return;
+    if (isStreaming) { showToast('请等待'); return; }
+    
+    // 编辑消息（添加新版本，不删除旧版本）
+    editUserMessage(session, messageIndex, newContent.trim());
+    const aiMsgIndex = messageIndex + 1;
+    
+    // 如果对应的AI消息存在，用新版本替换占位符
+    if (aiMsgIndex < session.messages.length && session.messages[aiMsgIndex].role === 'assistant') {
+      const aiMsg = session.messages[aiMsgIndex];
       activeMenuMessageId = null;
       renderChat();
       
+      isStreaming = true;
       try {
-        const newContent = await callDeepSeekAPI(contextMessages);
-        const aiMsg = session.messages[aiMessageIndex];
-        
-        if (!aiMsg.regeneratedVersions) {
-          aiMsg.regeneratedVersions = [{ 
-            content: aiMsg.content, 
-            timestamp: aiMsg._regeneratedAt || new Date().toISOString() 
-          }];
-          aiMsg._isRegenerated = true;
+        const reply = await callDeepSeekAPI([{ role: 'user', content: newContent.trim() }]);
+        // 更新最新版本的AI回答
+        const lastVersion = aiMsg.versions[aiMsg.versions.length - 1];
+        if (lastVersion && lastVersion.placeholder) {
+          lastVersion.content = reply;
+          lastVersion.placeholder = false;
+          lastVersion.timestamp = new Date().toISOString();
         }
-        
-        aiMsg.regeneratedVersions.push({ 
-          content: aiMsg.content, 
-          timestamp: new Date().toISOString() 
-        });
-        
-        aiMsg.content = newContent;
-        aiMsg._regeneratedAt = new Date().toISOString();
-        aiMsg._currentRegeneratedIndex = aiMsg.regeneratedVersions.length;
         aiMsg.isError = false;
-        
         session.updatedAt = new Date().toISOString();
-        saveState().then(() => backupToLocalStorage());
+        saveState();
       } catch (e) {
-        showToast('重新生成失败: ' + e.message);
-      } finally {
-        isStreaming = false;
-        renderChat();
-      }
-    }
-
-    function switchRegeneratedVersion(session, aiMessageIndex, direction) {
-      const msg = session.messages[aiMessageIndex];
-      if (!msg?.regeneratedVersions?.length) return false;
-      
-      const versions = msg.regeneratedVersions;
-      let currentIdx = msg._currentRegeneratedIndex ?? versions.length;
-      
-      if (direction === 'prev') { 
-        if (currentIdx <= 0) return false; 
-        currentIdx--; 
-      } else if (direction === 'next') { 
-        if (currentIdx >= versions.length) return false; 
-        currentIdx++; 
-      } else return false;
-      
-      msg._currentRegeneratedIndex = currentIdx;
-      if (currentIdx < versions.length) {
-        msg.content = versions[currentIdx].content;
-      }
-      
-      saveState().then(() => backupToLocalStorage());
-      return true;
-    }
-
-    // ========== API调用 ==========
-    async function callDeepSeekAPI(messages) {
-      if (!appState.apiKey) throw new Error('请先在设置中配置API Key');
-      
-      const model = appState.deepThink ? 'deepseek-reasoner' : appState.model;
-      const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${appState.apiKey}` 
-        },
-        body: JSON.stringify({ 
-          model, 
-          messages, 
-          temperature: appState.temperature, 
-          max_tokens: appState.deepThink ? 4000 : 2000, 
-          stream: false 
-        })
-      });
-      
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        if (res.status === 401) throw new Error('API Key 无效');
-        if (res.status === 402) throw new Error('余额不足');
-        if (res.status === 429) throw new Error('请求太频繁');
-        throw new Error(err.error?.message || `API错误 ${res.status}`);
-      }
-      
-      const data = await res.json();
-      return data.choices[0].message.content;
-    }
-
-    // ========== 发送消息 ==========
-    async function sendMessage() {
-      if (isStreaming) { 
-        showToast('请等待当前回复完成'); 
-        return; 
-      }
-      
-      const text = document.getElementById('userInput').value.trim();
-      if (!text && !currentFile) return;
-      
-      let session = getActiveSession();
-      if (!session) {
-        session = createSession();
-      }
-      
-      let fullContent = text;
-      if (currentFile) {
-        fullContent = `[文件: ${currentFile.name}]\n${currentFile.content}\n\n${text || '请分析以上文件'}`;
-      }
-      
-      const userMsg = {
-        role: 'user', 
-        content: fullContent, 
-        isError: false,
-        _hasEdits: false, 
-        editHistory: [], 
-        _originalContent: fullContent, 
-        _currentVersionIndex: 0
-      };
-      
-      session.messages.push(userMsg);
-      session.updatedAt = new Date().toISOString();
-      
-      // 自动设置会话标题
-      if (session.messages.filter(m => m.role === 'user').length === 1) {
-        session.title = fullContent.substring(0, 30) || '新对话';
-      }
-      
-      // 立即保存
-      await saveState().then(() => backupToLocalStorage());
-      
-      document.getElementById('userInput').value = '';
-      document.getElementById('userInput').style.height = 'auto';
-      clearFile();
-      activeMenuMessageId = null;
-      renderChat();
-      
-      isStreaming = true;
-      
-      const contextMsgs = session.messages
-        .filter(m => !m.isError)
-        .map(m => ({
-          role: m.role, 
-          content: (m.role === 'user' && m._hasEdits) ? m.content : m.content
-        }));
-      
-      try {
-        const reply = await callDeepSeekAPI(contextMsgs);
-        
-        session.messages.push({
-          role: 'assistant', 
-          content: reply, 
-          isError: false,
-          _isRegenerated: false, 
-          regeneratedVersions: [], 
-          _currentRegeneratedIndex: 0
-        });
-        
-        session.updatedAt = new Date().toISOString();
-        await saveState().then(() => backupToLocalStorage());
-        
-      } catch (e) {
-        session.messages.push({ 
-          role: 'assistant', 
-          content: e.message, 
-          isError: true 
-        });
-        session.updatedAt = new Date().toISOString();
-        await saveState().then(() => backupToLocalStorage());
-        showToast(e.message);
-      } finally {
-        isStreaming = false;
-        renderChat();
-      }
-    }
-
-    async function editAndResend(session, messageIndex) {
-      const msg = session.messages[messageIndex];
-      if (!msg || msg.role !== 'user') return;
-      
-      const currentDisplay = getUserMessageDisplayContent(msg);
-      const newContent = prompt('编辑消息:', currentDisplay);
-      
-      if (newContent === null || newContent.trim() === '' || newContent.trim() === currentDisplay) return;
-      if (isStreaming) { 
-        showToast('请等待当前请求完成'); 
-        return; 
-      }
-      
-      editUserMessage(session, messageIndex, newContent.trim());
-      activeMenuMessageId = null;
-      renderChat();
-      
-      isStreaming = true;
-      
-      const contextMsgs = session.messages
-        .filter(m => !m.isError)
-        .map(m => ({
-          role: m.role, 
-          content: (m.role === 'user' && m._hasEdits) ? m.content : m.content
-        }));
-      
-      try {
-        const reply = await callDeepSeekAPI(contextMsgs);
-        
-        session.messages.push({
-          role: 'assistant', 
-          content: reply, 
-          isError: false,
-          _isRegenerated: false, 
-          regeneratedVersions: [], 
-          _currentRegeneratedIndex: 0
-        });
-        
-        session.updatedAt = new Date().toISOString();
-        await saveState().then(() => backupToLocalStorage());
-        
-      } catch (e) {
-        session.messages.push({ 
-          role: 'assistant', 
-          content: e.message, 
-          isError: true 
-        });
-        session.updatedAt = new Date().toISOString();
-        await saveState().then(() => backupToLocalStorage());
-      } finally {
-        isStreaming = false;
-        renderChat();
-      }
-    }
-
-    function clearFile() {
-      currentFile = null;
-      document.getElementById('filePreviewArea').innerHTML = '';
-    }
-
-    function toggleMessageMenu(sessionId, msgIndex) {
-      const id = msgId(sessionId, msgIndex);
-      activeMenuMessageId = activeMenuMessageId === id ? null : id;
-      renderChat();
-    }
-
-    // ========== UI渲染 ==========
-    function renderSessionList(filter = '') {
-      const list = document.getElementById('sessionList');
-      if (!list) return;
-      
-      list.innerHTML = '';
-      
-      if (!appState.sessionOrder || appState.sessionOrder.length === 0) {
-        list.innerHTML = '<div style="color:#666; padding:20px; text-align:center;">暂无会话</div>';
-        return;
-      }
-      
-      appState.sessionOrder
-        .filter(id => appState.sessions[id])
-        .forEach(id => {
-          const s = appState.sessions[id];
-          if (!s) return;
-          
-          if (filter && !(s.title || '').toLowerCase().includes(filter.toLowerCase())) return;
-          
-          const div = document.createElement('div');
-          div.className = `session-item ${id === appState.activeSessionId ? 'active' : ''}`;
-          div.innerHTML = `
-            <div class="session-info">
-              <div class="session-title">${s.title || '未命名'}</div>
-              <div class="session-meta">${(s.messages || []).length}条 · ${formatTime(s.updatedAt)}</div>
-            </div>
-            <div>
-              <button data-rename="${id}" style="background:none;border:none;color:#aaa;cursor:pointer;">✏️</button>
-              <button data-delete="${id}" style="background:none;border:none;color:#aaa;cursor:pointer;">🗑</button>
-            </div>
-          `;
-          
-          div.querySelector('.session-info').onclick = () => { 
-            appState.activeSessionId = id; 
-            activeMenuMessageId = null; 
-            saveState().then(() => backupToLocalStorage()); 
-            renderChat(); 
-            renderSessionList(); 
-            closeSidebar(); 
-          };
-          
-          div.querySelector('[data-rename]').onclick = (e) => { 
-            e.stopPropagation(); 
-            const t = prompt('重命名:', s.title); 
-            if (t?.trim()) renameSession(id, t); 
-          };
-          
-          div.querySelector('[data-delete]').onclick = (e) => { 
-            e.stopPropagation(); 
-            if (confirm(`确定删除会话"${s.title}"吗？`)) deleteSession(id); 
-          };
-          
-          list.appendChild(div);
-        });
-    }
-
-    function renderChat() {
-      const session = getActiveSession();
-      const container = document.getElementById('messagesContainer');
-      if (!container) return;
-      
-      document.getElementById('chatTitle').textContent = session?.title || 'DeepSeek 助手';
-      container.innerHTML = '';
-      
-      if (!session) {
-        container.innerHTML = '<div style="color:#666;text-align:center;margin-top:40%;">选择或创建会话</div>';
-        return;
-      }
-      
-      if (!session.messages || session.messages.length === 0) {
-        container.innerHTML = '<div style="color:#666;text-align:center;margin-top:40%;">开始新的对话吧</div>';
-        applyBackground();
-        return;
-      }
-      
-      session.messages.forEach((msg, idx) => {
-        if (!msg) return;
-        
-        const row = document.createElement('div');
-        row.className = `message-row ${msg.role || 'user'}`;
-        const avatar = msg.role === 'user' ? appState.userAvatar : appState.assistantAvatar;
-        
-        let displayContent = (msg.role === 'user' && msg._hasEdits) ? 
-          getUserMessageDisplayContent(msg) : (msg.content || '');
-        if (msg.isError) displayContent = '❌ ' + displayContent;
-        
-        const menuId = msgId(session.id, idx);
-        const isMenuVisible = activeMenuMessageId === menuId && !isStreaming;
-        
-        let actionsHtml = '';
-        if (msg.role === 'user') {
-          actionsHtml += `<button class="action-btn edit-msg-btn" data-idx="${idx}">✏️ 编辑</button>`;
-          if (msg._hasEdits && msg.editHistory?.length > 0) {
-            const cur = msg._currentVersionIndex ?? msg.editHistory.length;
-            const max = msg.editHistory.length;
-            actionsHtml += `<span class="version-controls">
-              <button class="version-btn user-ver-prev" data-idx="${idx}" ${cur===0?'disabled':''}>◀</button>
-              <span class="version-info">${cur+1}/${max+1}</span>
-              <button class="version-btn user-ver-next" data-idx="${idx}" ${cur===max?'disabled':''}>▶</button>
-            </span>`;
-            if (cur < max) actionsHtml += '<span class="editing-indicator">(历史版本)</span>';
-          }
+        const lastVersion = aiMsg.versions[aiMsg.versions.length - 1];
+        if (lastVersion && lastVersion.placeholder) {
+          lastVersion.content = e.message;
+          lastVersion.placeholder = false;
         }
-        if (msg.role === 'assistant' && !msg.isError) {
-          actionsHtml += `<button class="action-btn regen-btn" data-idx="${idx}">🔄 重新生成</button>`;
-          if (msg.regeneratedVersions?.length > 0) {
-            const cur = msg._currentRegeneratedIndex ?? msg.regeneratedVersions.length;
-            const max = msg.regeneratedVersions.length;
-            actionsHtml += `<span class="version-controls">
-              <button class="version-btn regen-ver-prev" data-idx="${idx}" ${cur===0?'disabled':''}>◀</button>
-              <span class="version-info">${cur+1}/${max+1}</span>
-              <button class="version-btn regen-ver-next" data-idx="${idx}" ${cur===max?'disabled':''}>▶</button>
-            </span>`;
-          }
-        }
-        
-        const bubbleHtml = `<div class="bubble" data-menu-id="${menuId}">${escapeHtml(displayContent)}</div>`;
-        const actionsVisibility = isMenuVisible ? 'visible' : '';
-        const isRegenerated = msg._isRegenerated || (msg.regeneratedVersions?.length > 0);
-        
-        row.innerHTML = `
-          <div class="message-wrapper" style="width:100%;">
-            ${msg.role==='user' ? `
-              <div style="flex:1;display:flex;flex-direction:column;align-items:flex-end;">
-                ${isRegenerated ? `<div class="regenerated-block">${bubbleHtml}</div>` : bubbleHtml}
-                <div class="message-actions ${actionsVisibility}" style="justify-content:flex-end;">${actionsHtml}</div>
-              </div>
-              <span class="avatar">${avatar}</span>
-            ` : `
-              <span class="avatar">${avatar}</span>
-              <div style="flex:1;">
-                ${isRegenerated ? `<div class="regenerated-block">${bubbleHtml}</div>` : bubbleHtml}
-                <div class="message-actions ${actionsVisibility}">${actionsHtml}</div>
-              </div>
-            `}
-          </div>`;
-        container.appendChild(row);
-        
-        setTimeout(() => {
-          const bubble = row.querySelector('.bubble');
-          if (bubble) {
-            bubble.addEventListener('click', (e) => {
-              e.stopPropagation();
-              toggleMessageMenu(session.id, idx);
-            });
-          }
-          
-          row.querySelector('.edit-msg-btn')?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            editAndResend(session, idx);
-          });
-          row.querySelector('.regen-btn')?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            regenerateAnswer(session, idx);
-          });
-          row.querySelector('.user-ver-prev')?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            switchUserMessageVersion(session, idx, 'prev');
-            renderChat();
-          });
-          row.querySelector('.user-ver-next')?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            switchUserMessageVersion(session, idx, 'next');
-            renderChat();
-          });
-          row.querySelector('.regen-ver-prev')?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            switchRegeneratedVersion(session, idx, 'prev');
-            renderChat();
-          });
-          row.querySelector('.regen-ver-next')?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            switchRegeneratedVersion(session, idx, 'next');
-            renderChat();
-          });
-        }, 0);
-      });
-      
-      applyBackground();
-      container.scrollTop = container.scrollHeight;
+        aiMsg.isError = true;
+        session.updatedAt = new Date().toISOString();
+        saveState();
+      } finally {
+        isStreaming = false;
+        renderChat();
+      }
     }
+  }
 
-    function escapeHtml(text) {
+  function clearFile() { currentFile = null; document.getElementById('filePreviewArea').innerHTML = ''; }
+  function toggleMessageMenu(sid, idx) { const id = msgId(sid, idx); activeMenuMessageId = activeMenuMessageId === id ? null : id; renderChat(); }
+
+  // ========== 渲染 ==========
+  function renderSessionList(filter = '') {
+    const list = document.getElementById('sessionList');
+    list.innerHTML = '';
+    appState.sessionOrder.filter(id => appState.sessions[id]).forEach(id => {
+      const s = appState.sessions[id];
+      if (filter && !s.title.toLowerCase().includes(filter.toLowerCase())) return;
       const div = document.createElement('div');
-      div.textContent = text || '';
-      return div.innerHTML;
-    }
+      div.className = `session-item ${id === appState.activeSessionId ? 'active' : ''}`;
+      div.innerHTML = `<div class="session-info"><div class="session-title">${s.title||'未命名'}</div><div class="session-meta">${s.messages.length}条 · ${formatTime(s.updatedAt)}</div></div><div><button data-rename="${id}" style="background:none;border:none;color:#aaa;cursor:pointer;">✏️</button><button data-delete="${id}" style="background:none;border:none;color:#aaa;cursor:pointer;">🗑</button></div>`;
+      div.querySelector('.session-info').onclick = () => { appState.activeSessionId = id; activeMenuMessageId = null; saveState(); renderChat(); renderSessionList(); closeSidebar(); };
+      div.querySelector('[data-rename]').onclick = (e) => { e.stopPropagation(); const t = prompt('重命名:', s.title); if (t?.trim()) renameSession(id, t); };
+      div.querySelector('[data-delete]').onclick = (e) => { e.stopPropagation(); if (confirm('删除会话？')) deleteSession(id); };
+      list.appendChild(div);
+    });
+  }
 
-    function applyBackground() {
-      const c = document.getElementById('messagesContainer');
-      if (!c) return;
+  function renderChat() {
+    const session = getActiveSession();
+    const container = document.getElementById('messagesContainer');
+    document.getElementById('chatTitle').textContent = session?.title || 'DeepSeek 助手';
+    container.innerHTML = '';
+    if (!session) { container.innerHTML = '<div style="color:#666;text-align:center;margin-top:40%;">选择或创建会话</div>'; return; }
+    
+    session.messages.forEach((msg, idx) => {
+      const row = document.createElement('div');
+      row.className = `message-row ${msg.role}`;
+      const avatar = msg.role === 'user' ? appState.userAvatar : appState.assistantAvatar;
       
-      c.style.backgroundImage = 'none';
-      if (appState.bgType === 'color') {
-        c.style.background = appState.bgValue || '#0a0a0a';
-      } else if (appState.bgType === 'gradient') {
-        c.style.background = appState.bgValue || 'linear-gradient(135deg, #1a1a2e, #16213e)';
-      } else if (appState.bgType === 'image') {
-        c.style.background = '';
-        c.style.backgroundImage = `url(${appState.bgValue})`;
-        c.style.backgroundSize = 'cover';
-        c.style.backgroundPosition = 'center';
+      let displayContent;
+      if (msg.role === 'user') {
+        displayContent = getUserDisplayContent(msg);
+      } else {
+        displayContent = getAssistantDisplayContent(msg);
       }
-    }
-
-    function closeSidebar() { 
-      document.getElementById('sidebar').classList.remove('open'); 
-    }
-
-    // 全局点击关闭菜单
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.bubble') && !e.target.closest('.message-actions')) {
-        if (activeMenuMessageId !== null) {
-          activeMenuMessageId = null;
-          renderChat();
+      if (msg.isError) displayContent = '❌ ' + displayContent;
+      
+      const menuId = msgId(session.id, idx);
+      const isMenuVisible = activeMenuMessageId === menuId && !isStreaming;
+      const hasMultipleVersions = msg.versions && msg.versions.length > 1;
+      
+      let actionsHtml = '';
+      if (msg.role === 'user') {
+        actionsHtml += `<button class="action-btn edit-msg-btn" data-idx="${idx}">✏️ 编辑</button>`;
+        if (hasMultipleVersions) {
+          const cur = getUserCurrentVersionIndex(msg);
+          const total = msg.versions.length;
+          actionsHtml += `<span class="version-controls">
+            <button class="version-btn user-ver-prev" data-idx="${idx}" ${cur===0?'disabled':''}>◀</button>
+            <span class="version-info">${cur+1}/${total}</span>
+            <button class="version-btn user-ver-next" data-idx="${idx}" ${cur===total-1?'disabled':''}>▶</button>
+          </span>`;
+          if (cur < total - 1) actionsHtml += '<span class="editing-indicator">(查看旧版)</span>';
         }
       }
+      if (msg.role === 'assistant' && !msg.isError) {
+        actionsHtml += `<button class="action-btn regen-btn" data-idx="${idx}">🔄 重新生成</button>`;
+        if (hasMultipleVersions) {
+          const cur = getAssistantCurrentVersionIndex(msg);
+          const total = msg.versions.length;
+          actionsHtml += `<span class="version-controls">
+            <button class="version-btn ai-ver-prev" data-idx="${idx}" ${cur===0?'disabled':''}>◀</button>
+            <span class="version-info">版本${cur+1}/${total}</span>
+            <button class="version-btn ai-ver-next" data-idx="${idx}" ${cur===total-1?'disabled':''}>▶</button>
+          </span>`;
+        }
+      }
+      
+      const bubbleHtml = `<div class="bubble" data-menu-id="${menuId}">${escapeHtml(displayContent)}</div>`;
+      const actionsVisibility = isMenuVisible ? 'visible' : '';
+      
+      row.innerHTML = `<div class="message-wrapper" style="width:100%;">
+        ${msg.role==='user' ? `
+          <div style="flex:1;display:flex;flex-direction:column;align-items:flex-end;">
+            ${hasMultipleVersions ? `<div class="regenerated-block">${bubbleHtml}</div>` : bubbleHtml}
+            <div class="message-actions ${actionsVisibility}" style="justify-content:flex-end;">${actionsHtml}</div>
+          </div><span class="avatar">${avatar}</span>` : `
+          <span class="avatar">${avatar}</span>
+          <div style="flex:1;">
+            ${hasMultipleVersions ? `<div class="regenerated-block">${bubbleHtml}</div>` : bubbleHtml}
+            <div class="message-actions ${actionsVisibility}">${actionsHtml}</div>
+          </div>`}
+      </div>`;
+      container.appendChild(row);
+      
+      setTimeout(() => {
+        row.querySelector('.bubble')?.addEventListener('click', (e) => { e.stopPropagation(); toggleMessageMenu(session.id, idx); });
+        row.querySelector('.edit-msg-btn')?.addEventListener('click', (e) => { e.stopPropagation(); editAndResend(session, idx); });
+        row.querySelector('.regen-btn')?.addEventListener('click', (e) => { e.stopPropagation(); regenerateAnswer(session, idx); });
+        row.querySelector('.user-ver-prev')?.addEventListener('click', (e) => { e.stopPropagation(); switchUserMessageVersion(session, idx, 'prev'); renderChat(); });
+        row.querySelector('.user-ver-next')?.addEventListener('click', (e) => { e.stopPropagation(); switchUserMessageVersion(session, idx, 'next'); renderChat(); });
+        row.querySelector('.ai-ver-prev')?.addEventListener('click', (e) => { e.stopPropagation(); switchAssistantVersion(session, idx, 'prev'); renderChat(); });
+        row.querySelector('.ai-ver-next')?.addEventListener('click', (e) => { e.stopPropagation(); switchAssistantVersion(session, idx, 'next'); renderChat(); });
+      }, 0);
     });
+    applyBackground();
+    container.scrollTop = container.scrollHeight;
+  }
 
-    // 页面卸载前保存
-    window.addEventListener('beforeunload', () => {
-      console.log('[页面] 即将关闭，保存数据...');
-      // 同步保存到localStorage（IndexedDB可能来不及）
+  function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text || ''; return div.innerHTML; }
+  function applyBackground() {
+    const c = document.getElementById('messagesContainer');
+    c.style.backgroundImage = 'none';
+    if (appState.bgType === 'color') c.style.background = appState.bgValue || '#0a0a0a';
+    else if (appState.bgType === 'gradient') c.style.background = appState.bgValue;
+    else { c.style.background = ''; c.style.backgroundImage = `url(${appState.bgValue})`; c.style.backgroundSize = 'cover'; c.style.backgroundPosition = 'center'; }
+  }
+  function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
+  document.addEventListener('click', (e) => { if (!e.target.closest('.bubble') && !e.target.closest('.message-actions') && activeMenuMessageId !== null) { activeMenuMessageId = null; renderChat(); } });
+
+  // ========== 事件 ==========
+  document.getElementById('menuBtn').onclick = () => { renderSessionList(); document.getElementById('sidebar').classList.add('open'); };
+  document.getElementById('closeSidebarBtn').onclick = closeSidebar;
+  document.getElementById('sidebarBackdrop').onclick = closeSidebar;
+  document.getElementById('newChatBtn').onclick = () => { createSession(); renderSessionList(); renderChat(); closeSidebar(); };
+  document.getElementById('searchSessionInput').oninput = (e) => renderSessionList(e.target.value);
+  document.getElementById('sendBtn').onclick = sendMessage;
+  document.getElementById('attachBtn').onclick = () => document.getElementById('fileInput').click();
+  document.getElementById('fileInput').onchange = async (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    if (file.size > 50*1024*1024) { showToast('文件≤50MB'); return; }
+    try { const text = await file.text(); currentFile = { name: file.name, content: text, size: file.size }; document.getElementById('filePreviewArea').innerHTML = `<div class="file-preview">📄 ${file.name} (${(file.size/1024).toFixed(1)}KB) <button class="remove-file-btn" onclick="window.clearFile()">✕</button></div>`; } catch { showToast('无法读取'); }
+  };
+  window.clearFile = clearFile;
+  const ui = document.getElementById('userInput');
+  ui.addEventListener('input', () => { ui.style.height = 'auto'; ui.style.height = Math.min(ui.scrollHeight, 150) + 'px'; });
+  ui.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+  document.getElementById('settingsBtn').onclick = () => document.getElementById('settingsPanel').classList.toggle('active');
+  document.getElementById('closeSettingsBtn').onclick = () => document.getElementById('settingsPanel').classList.remove('active');
+  ['apiKeyInput','modelSelect','tempRange','deepThinkCheck','userAvatarInput','aiAvatarInput','bgTypeSelect','bgValueInput'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const key = id.replace('Input','').replace('Select','').replace('Check','');
+    const event = el.type === 'checkbox' ? 'change' : (el.type === 'range' ? 'input' : 'change');
+    el.addEventListener(event, function() {
+      const val = el.type === 'checkbox' ? el.checked : el.value;
+      const stateKey = { apiKey: 'apiKey', model: 'model', temp: 'temperature', deepThink: 'deepThink', userAvatar: 'userAvatar', aiAvatar: 'assistantAvatar', bgType: 'bgType', bgValue: 'bgValue' }[key] || key;
+      appState[stateKey] = stateKey === 'temperature' ? parseFloat(val) : val;
+      if (stateKey === 'temperature') document.getElementById('tempValue').textContent = val;
+      saveState();
+      if (['userAvatar','assistantAvatar'].includes(stateKey)) renderChat();
+      if (['bgType','bgValue'].includes(stateKey)) applyBackground();
+    });
+  });
+  document.getElementById('exportBtn').onclick = () => {
+    const blob = new Blob([JSON.stringify({...appState}, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `deepseek-${new Date().toISOString().slice(0,10)}.json`; a.click(); showToast('导出成功');
+  };
+  document.getElementById('importBtn').onclick = () => {
+    const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json';
+    inp.onchange = async (e) => {
       try {
-        const backupData = JSON.stringify(appState);
-        localStorage.setItem('deepseek_backup', backupData);
-        console.log('[页面] 数据已备份到localStorage');
-      } catch (e) {
-        console.warn('[页面] 紧急保存失败:', e);
-      }
-    });
+        const text = await e.target.files[0].text(); const data = JSON.parse(text);
+        if (data.sessions) {
+          Object.keys(data.sessions).forEach(id => { if (!appState.sessions[id]) { appState.sessions[id] = data.sessions[id]; appState.sessionOrder.push(id); } });
+          if (confirm('同时导入设置？')) ['apiKey','model','temperature','deepThink','bgType','bgValue','userAvatar','assistantAvatar'].forEach(k => { if (data[k] !== undefined) appState[k] = data[k]; });
+          appState.activeSessionId = data.activeSessionId || appState.sessionOrder[0];
+          saveState(); renderSessionList(); renderChat();
+          document.getElementById('apiKeyInput').value = appState.apiKey; document.getElementById('modelSelect').value = appState.model;
+          document.getElementById('tempRange').value = appState.temperature; document.getElementById('tempValue').textContent = appState.temperature;
+          document.getElementById('deepThinkCheck').checked = appState.deepThink; showToast('导入成功');
+        }
+      } catch { showToast('文件无效'); }
+    };
+    inp.click();
+  };
 
-    // 页面隐藏时保存（移动端切换应用）
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        console.log('[页面] 页面隐藏，保存数据...');
-        saveState().then(() => backupToLocalStorage()).catch(e => console.warn('[页面] 隐藏时保存失败:', e));
-      }
-    });
-
-    // ========== 事件绑定 ==========
-    document.getElementById('menuBtn').onclick = () => { 
-      renderSessionList(); 
-      document.getElementById('sidebar').classList.add('open'); 
-    };
+  // ========== 初始化 ==========
+  (async () => {
+    await openDB(); await loadState();
+    if (!Object.keys(appState.sessions).length) createSession('欢迎使用');
+    if (!appState.activeSessionId || !appState.sessions[appState.activeSessionId]) appState.activeSessionId = appState.sessionOrder[0];
     
-    document.getElementById('closeSidebarBtn').onclick = closeSidebar;
-    document.getElementById('sidebarBackdrop').onclick = closeSidebar;
-    
-    document.getElementById('newChatBtn').onclick = () => { 
-      createSession(); 
-      renderSessionList(); 
-      renderChat(); 
-      closeSidebar(); 
-    };
-    
-    document.getElementById('searchSessionInput').oninput = (e) => renderSessionList(e.target.value);
-    document.getElementById('sendBtn').onclick = sendMessage;
-    document.getElementById('attachBtn').onclick = () => document.getElementById('fileInput').click();
-    
-    document.getElementById('fileInput').onchange = async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      if (file.size > 50 * 1024 * 1024) { 
-        showToast('文件不能超过50MB'); 
-        return; 
-      }
-      try {
-        const text = await file.text();
-        currentFile = { name: file.name, content: text, size: file.size };
-        document.getElementById('filePreviewArea').innerHTML = `
-          <div class="file-preview">
-            📄 ${file.name} (${(file.size/1024).toFixed(1)}KB) 
-            <button class="remove-file-btn" onclick="window.clearFile()">✕</button>
-          </div>
-        `;
-      } catch { 
-        showToast('无法读取文件'); 
-      }
-    };
-    
-    window.clearFile = clearFile;
-    
-    const userInput = document.getElementById('userInput');
-    userInput.addEventListener('input', () => { 
-      userInput.style.height = 'auto'; 
-      userInput.style.height = Math.min(userInput.scrollHeight, 150) + 'px'; 
-    });
-    
-    userInput.addEventListener('keydown', (e) => { 
-      if (e.key === 'Enter' && !e.shiftKey) { 
-        e.preventDefault(); 
-        sendMessage(); 
-      } 
-    });
-    
-    // 设置面板
-    document.getElementById('settingsBtn').onclick = () => {
-      document.getElementById('settingsPanel').classList.toggle('active');
-    };
-    
-    document.getElementById('closeSettingsBtn').onclick = () => {
-      document.getElementById('settingsPanel').classList.remove('active');
-    };
-    
-    // 设置项绑定（带自动保存）
-    document.getElementById('apiKeyInput').onchange = function() { 
-      appState.apiKey = this.value; 
-      saveState().then(() => backupToLocalStorage()); 
-    };
-    
-    document.getElementById('modelSelect').onchange = function() { 
-      appState.model = this.value; 
-      saveState().then(() => backupToLocalStorage()); 
-    };
-    
-    document.getElementById('tempRange').oninput = function() { 
-      appState.temperature = parseFloat(this.value); 
-      document.getElementById('tempValue').textContent = this.value; 
-      saveState().then(() => backupToLocalStorage()); 
-    };
-    
-    document.getElementById('deepThinkCheck').onchange = function() { 
-      appState.deepThink = this.checked; 
-      saveState().then(() => backupToLocalStorage()); 
-    };
-    
-    document.getElementById('userAvatarInput').onchange = function() { 
-      appState.userAvatar = this.value || '😀'; 
-      saveState().then(() => backupToLocalStorage()); 
-      renderChat(); 
-    };
-    
-    document.getElementById('aiAvatarInput').onchange = function() { 
-      appState.assistantAvatar = this.value || '🤖'; 
-      saveState().then(() => backupToLocalStorage()); 
-      renderChat(); 
-    };
-    
-    document.getElementById('bgTypeSelect').onchange = function() { 
-      appState.bgType = this.value; 
-      saveState().then(() => backupToLocalStorage()); 
-      applyBackground(); 
-    };
-    
-    document.getElementById('bgValueInput').oninput = function() { 
-      appState.bgValue = this.value; 
-      saveState().then(() => backupToLocalStorage()); 
-      applyBackground(); 
-    };
-    
-    // 导出
-    document.getElementById('exportBtn').onclick = () => {
-      const data = JSON.parse(JSON.stringify(appState));
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `deepseek-backup-${new Date().toISOString().slice(0, 10)}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-      showToast('导出成功');
-    };
-    
-    // 导入
-    document.getElementById('importBtn').onclick = () => {
-      const inp = document.createElement('input');
-      inp.type = 'file';
-      inp.accept = '.json';
-      
-      inp.onchange = async (e) => {
-        try {
-          const file = e.target.files[0];
-          if (!file) return;
-          
-          const text = await file.text();
-          const data = JSON.parse(text);
-          
-          if (!data.sessions || !data.sessionOrder) {
-            showToast('无效的备份文件');
-            return;
-          }
-          
-          // 合并会话
-          Object.keys(data.sessions).forEach(id => {
-            if (!appState.sessions[id]) {
-              appState.sessions[id] = data.sessions[id];
-              if (!appState.sessionOrder.includes(id)) {
-                appState.sessionOrder.push(id);
-              }
-            }
-          });
-          
-          if (confirm('是否同时导入设置（API Key、模型等）？')) {
-            const settingsKeys = [
-              'apiKey', 'model', 'temperature', 'deepThink', 
-              'bgType', 'bgValue', 'userAvatar', 'assistantAvatar'
-            ];
-            settingsKeys.forEach(key => {
-              if (data[key] !== undefined) appState[key] = data[key];
-            });
-          }
-          
-          if (data.activeSessionId && appState.sessions[data.activeSessionId]) {
-            appState.activeSessionId = data.activeSessionId;
-          } else if (appState.sessionOrder.length > 0) {
-            appState.activeSessionId = appState.sessionOrder[0];
-          }
-          
-          // 保存并刷新
-          await saveState().then(() => backupToLocalStorage());
-          
-          // 更新设置面板
-          document.getElementById('apiKeyInput').value = appState.apiKey || '';
-          document.getElementById('modelSelect').value = appState.model;
-          document.getElementById('tempRange').value = appState.temperature;
-          document.getElementById('tempValue').textContent = appState.temperature;
-          document.getElementById('deepThinkCheck').checked = appState.deepThink;
-          document.getElementById('userAvatarInput').value = appState.userAvatar;
-          document.getElementById('aiAvatarInput').value = appState.assistantAvatar;
-          document.getElementById('bgTypeSelect').value = appState.bgType;
-          document.getElementById('bgValueInput').value = appState.bgValue || '';
-          
-          renderSessionList();
-          renderChat();
-          showToast('导入成功');
-          
-        } catch (err) {
-          console.error('导入失败:', err);
-          showToast('文件解析失败');
-        }
-      };
-      
-      inp.click();
-    };
-
-    // ========== 初始化 ==========
-    async function init() {
-      console.log('[初始化] 开始加载应用...');
-      
-      try {
-        // 打开数据库
-        await openDB();
-        console.log('[初始化] 数据库连接成功');
-        
-        // 加载数据
-        await loadState();
-        console.log('[初始化] 数据加载完成');
-        
-        // 验证数据完整性
-        if (!appState.sessions || typeof appState.sessions !== 'object') {
-          console.warn('[初始化] sessions数据异常，重置');
-          appState.sessions = {};
-        }
-        if (!Array.isArray(appState.sessionOrder)) {
-          console.warn('[初始化] sessionOrder数据异常，重置');
-          appState.sessionOrder = [];
-        }
-        
-        // 清理无效的sessionOrder引用
-        appState.sessionOrder = appState.sessionOrder.filter(id => appState.sessions[id]);
-        
-        // 如果没有会话，创建默认会话
-        if (Object.keys(appState.sessions).length === 0) {
-          console.log('[初始化] 创建默认会话');
-          createSession('欢迎使用');
-        }
-        
-        // 确保有活跃会话
-        if (!appState.activeSessionId || !appState.sessions[appState.activeSessionId]) {
-          if (appState.sessionOrder.length > 0) {
-            appState.activeSessionId = appState.sessionOrder[0];
-            console.log('[初始化] 设置活跃会话:', appState.activeSessionId);
+    // 数据迁移
+    let migrated = false;
+    Object.values(appState.sessions).forEach(s => {
+      s.messages.forEach(msg => {
+        if (!msg.versions || msg.versions.length === 0) {
+          if (msg.content) {
+            msg.versions = [{ content: msg.content, timestamp: msg.editedAt || msg._regeneratedAt || new Date().toISOString() }];
+            msg.currentVersionIndex = 0;
+            migrated = true;
           }
         }
-        
-        // 恢复设置面板
-        document.getElementById('apiKeyInput').value = appState.apiKey || '';
-        document.getElementById('modelSelect').value = appState.model || 'deepseek-chat';
-        document.getElementById('tempRange').value = appState.temperature || 0.7;
-        document.getElementById('tempValue').textContent = appState.temperature || 0.7;
-        document.getElementById('deepThinkCheck').checked = appState.deepThink || false;
-        document.getElementById('userAvatarInput').value = appState.userAvatar || '😀';
-        document.getElementById('aiAvatarInput').value = appState.assistantAvatar || '🤖';
-        document.getElementById('bgTypeSelect').value = appState.bgType || 'color';
-        document.getElementById('bgValueInput').value = appState.bgValue || '';
-        
-        // 渲染界面
-        renderSessionList();
-        renderChat();
-        applyBackground();
-        
-        // 执行一次备份
-        backupToLocalStorage();
-        
-        console.log('[初始化] 应用加载完成，会话数:', Object.keys(appState.sessions).length);
-        
-        // 显示数据统计
-        const totalMessages = Object.values(appState.sessions).reduce((sum, s) => sum + (s.messages?.length || 0), 0);
-        console.log(`[初始化] 总会话数: ${Object.keys(appState.sessions).length}, 总消息数: ${totalMessages}`);
-        
-      } catch (error) {
-        console.error('[初始化] 初始化失败:', error);
-        
-        // 即使数据库失败，也尝试从localStorage恢复
-        tryLoadFromLocalStorage();
-        
-        // 确保至少有基本功能
-        if (Object.keys(appState.sessions).length === 0) {
-          appState.sessions = {};
-          appState.sessionOrder = [];
-          createSession('欢迎使用');
-        }
-        
-        renderSessionList();
-        renderChat();
-        applyBackground();
-        
-        showToast('数据加载异常，已尝试恢复');
-      }
-    }
-
-    // 启动应用
-    init().catch(error => {
-      console.error('[启动] 应用启动失败:', error);
-      showToast('应用加载失败，请刷新页面');
+        // 清理旧字段
+        delete msg._hasEdits;
+        delete msg.editHistory;
+        delete msg._originalContent;
+        delete msg._currentVersionIndex_old;
+        delete msg._isRegenerated;
+        delete msg.regeneratedVersions;
+        delete msg._regeneratedAt;
+        delete msg._currentRegeneratedIndex;
+      });
     });
+    if (migrated) { console.log('[迁移] 数据已升级'); saveState(); }
+    
+    document.getElementById('apiKeyInput').value = appState.apiKey || '';
+    document.getElementById('modelSelect').value = appState.model;
+    document.getElementById('tempRange').value = appState.temperature;
+    document.getElementById('tempValue').textContent = appState.temperature;
+    document.getElementById('deepThinkCheck').checked = appState.deepThink;
+    document.getElementById('userAvatarInput').value = appState.userAvatar;
+    document.getElementById('aiAvatarInput').value = appState.assistantAvatar;
+    document.getElementById('bgTypeSelect').value = appState.bgType;
+    document.getElementById('bgValueInput').value = appState.bgValue || '';
+    renderSessionList(); renderChat(); applyBackground();
   })();
+})();
 </script>
 </body>
 </html>
